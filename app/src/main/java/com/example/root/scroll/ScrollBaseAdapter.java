@@ -55,9 +55,9 @@ public class ScrollBaseAdapter extends BaseAdapter {
         }
 
         if (itemsData != null) {
-            viewHolder.item_text.setText(String.valueOf(itemsData.get(position).getIndex()));
+            // viewHolder.item_text.setText(String.valueOf(itemsData.get(position).getIndex()));
         } else {
-            viewHolder.item_text.setText("error");
+            // viewHolder.item_text.setText("error");
         }
         convertView.setBackgroundColor(itemsData.get(position).getColor());
 

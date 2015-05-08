@@ -3,4 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="btn_setting">Setting</string>
+    <string name="btn_edit">Edit</string>
+    <string name="btn_time_ok">Ok</string>
 </resources>

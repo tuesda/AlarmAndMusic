@@ -21,6 +21,8 @@
             </intent-filter>
         </activity>
         <service android:name="com.example.root.musicNav.MusicService"></service>
+        <activity android:name="com.example.root.blurringView.ActivityTest"></activity>
+        <activity android:name="com.example.root.viewSwitch.ActionBarTabsPager"></activity>
     </application>
 
 </manifest>
