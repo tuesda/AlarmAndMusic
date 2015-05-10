@@ -16,56 +16,38 @@ import java.util.ArrayList;
  * Email: zhangleicoding@163.com
  */
 public class ScrollBaseAdapter extends BaseAdapter {
-    public static final int NUM_OF_SCREEN = 32;
-    public static final int NUM_OF_ITEM = 1441 + NUM_OF_SCREEN;
 
+    private int num;
+    private Context context;
     private LayoutInflater mLayoutInflater;
-    private ArrayList<Item> itemsData;
 
-    public ScrollBaseAdapter(Context context, ArrayList<Item> itemsData) {
+    public ScrollBaseAdapter(int num, Context context) {
+        this.context = context;
+        this.num = num;
         mLayoutInflater = LayoutInflater.from(context);
-        this.itemsData = itemsData;
     }
 
     @Override
     public int getCount() {
-        return NUM_OF_ITEM;
+        return num;
     }
 
     @Override
-    public Object getItem(int position) {
+    public Object getItem(int i) {
         return null;
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(int i) {
         return 0;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
-        if (convertView == null) {
-            convertView = mLayoutInflater.inflate(R.layout.scroll_item, null);
-            viewHolder = new ViewHolder();
-            viewHolder.item_text = (TextView)convertView.findViewById(R.id.item_text);
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder)convertView.getTag();
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        if (view==null) {
+            view = mLayoutInflater.inflate(R.layout.scroll_item, null);
         }
-
-        if (itemsData != null) {
-            // viewHolder.item_text.setText(String.valueOf(itemsData.get(position).getIndex()));
-        } else {
-            // viewHolder.item_text.setText("error");
-        }
-        convertView.setBackgroundColor(itemsData.get(position).getColor());
-
-
-        return convertView;
-    }
-    public final class ViewHolder {
-        public TextView item_text;
+        return view;
     }
 }
 

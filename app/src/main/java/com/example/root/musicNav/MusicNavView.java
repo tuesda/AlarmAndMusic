@@ -48,7 +48,8 @@ public class MusicNavView extends View {
 
         // mFillPaint setting
         mFillPaint = new Paint();
-        mFillPaint.setColor(0xFF4BB390);
+        //mFillPaint.setColor(0xFF4BB390);
+        mFillPaint.setColor(0x504B90B3);
         mFillPaint.setStyle(Paint.Style.FILL);
         mFillPaint.setStrokeWidth(10);
         mFillPaint.setAntiAlias(true);

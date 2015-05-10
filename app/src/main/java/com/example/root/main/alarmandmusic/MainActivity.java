@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,20 +23,18 @@ import com.example.root.scroll.*;
 import static com.example.root.scroll.ScrollBaseAdapter.*;
 import com.example.root.musicNav.MusicService.*;
 import com.example.root.musicNav.*;
-import com.example.root.viewSwitch.ActionBarTabsPager;
-import com.example.root.viewSwitch.ViewSwitchLayout;
 
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends Activity {
 
 
     // scroll list items
     private ArrayList<Item> itemsData;
     // scroll layout
-    // private ScrollLayout scrollLayout;
+     private ScrollLayout scrollLayout;
 
     // music backend part
     private MusicUtils musicUtils;
@@ -56,7 +53,7 @@ public class MainActivity extends FragmentActivity {
     private PopWindow popWindow;
 
     // view switch
-    private ViewSwitchLayout viewSwitchLayout;
+//    private ViewSwitchLayout viewSwitchLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +65,16 @@ public class MainActivity extends FragmentActivity {
 
     private void init() {
 
-        Intent testIntent = new Intent(this, ActionBarTabsPager.class);
-        startActivity(testIntent);
+        RelativeLayout mainActivity = (RelativeLayout)findViewById(R.id.activity_main);
+
+//        Intent testIntent = new Intent(this, ActionBarTabsPager.class);
+//        startActivity(testIntent);
 
 //        itemsData = ScrollUtils.getItems(NUM_OF_ITEM);
 //        scrollLayout = new ScrollLayout(this, itemsData);
+
+        scrollLayout = new ScrollLayout(this, mainActivity);
+
         // music backend part of music nav
         musicUtils = new MusicUtils(this);
 
@@ -101,7 +103,7 @@ public class MainActivity extends FragmentActivity {
 
         // music service init end
 
-        RelativeLayout mainActivity = (RelativeLayout)findViewById(R.id.activity_main);
+
         musicNavLayout = new MusicNavLayout(this, mainActivity);
 
         globalWidget = new GlobalWidget(mainActivity, this);
@@ -114,7 +116,7 @@ public class MainActivity extends FragmentActivity {
         });
 
         // view switch start
-        viewSwitchLayout = new ViewSwitchLayout(this, mainActivity);
+//        viewSwitchLayout = new ViewSwitchLayout(this, mainActivity);
 
 
         // view switch end

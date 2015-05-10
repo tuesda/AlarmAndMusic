@@ -74,6 +74,7 @@ public class GlobalWidget {
         } else {
             // tell to log that something wrong!
         }
+        timeOkBtn.setVisibility(View.INVISIBLE);
 
     }
 
