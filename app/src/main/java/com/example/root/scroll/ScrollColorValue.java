@@ -57,6 +57,67 @@ public class ScrollColorValue {
             new ColorRange("ff193348", "ff0d1a29"), // 23
     };
 
+    private static final String[] windmillWallColors = {
+      "ff03111f", // 00
+      "ff071726", // 01
+      "ff0f193f", // 02
+      "ff191d4f", // 03
+      "ff3a3857", // 04
+      "ff9b84a6", // 05
+      "fff8dbdf", // 06
+      "fff4f1d5", // 07
+      "fff4f0ec", // 08
+      "fff3efee", // 09
+      "fff3efee", // 10
+      "fff3efee", // 11
+      "fff3efee", // 12
+      "ffd8d7d7", // 13
+      "ffd8d7d7", // 14
+      "ffbfbebe", // 15
+      "ffd8d7d7", // 16
+      "ffd9d1b1", // 17
+      "fff1cfab", // 18
+      "ff49767b", // 19
+      "ff1e4e46", // 20
+      "ff244c55", // 21
+      "ff173047", // 22
+      "ff071726", // 23
+    };
+
+    private static final String[] windmillProofColors = {
+            "ff03111f", // 00
+            "ff071726", // 01
+            "ff0f193f", // 02
+            "ff191d4f", // 03
+            "ff3a3857", // 04
+            "ffa6849b", // 05
+            "ffc2989d", // 06
+            "ffc0bb96", // 07
+            "ffc59584",	// 08
+            "ffc59584",	// 09
+            "ffc59584",	// 10
+            "ffc59584",	// 11
+            "ffc59584",	// 12
+            "ffaa938b",	// 13
+            "ffaa938b",	// 14
+            "ff978f8c",	// 15
+            "ffaa938b",	// 16
+            "ffd49a7a",	// 17
+            "ffb86f6c",	// 18
+            "ff49767b",	// 19
+            "ff1e4e46",	// 20
+            "ff244c55",	// 21
+            "ff173047",	// 22
+            "ff071726", // 23
+    };
+    public static String getWindmillProofC(int hour) {
+        return windmillProofColors[hour];
+    }
+
+    public static String getWindmillWallC(int hour) {
+        return windmillWallColors[hour];
+    }
+
 
     public static ColorRange getSeaColorRange(int hour) {
         return seaColorRanges[hour];

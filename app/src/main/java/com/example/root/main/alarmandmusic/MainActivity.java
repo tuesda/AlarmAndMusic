@@ -18,6 +18,7 @@ import com.example.root.blurringView.ActivityTest;
 import com.example.root.blurringView.PopWindow;
 import com.example.root.musicNav.MusicService;
 import com.example.root.otherComponent.GlobalWidget;
+import com.example.root.otherComponent.LandScape;
 import com.example.root.scroll.*;
 
 import static com.example.root.scroll.ScrollBaseAdapter.*;
@@ -55,6 +56,9 @@ public class MainActivity extends Activity {
     // view switch
 //    private ViewSwitchLayout viewSwitchLayout;
 
+    // landscape
+    private LandScape landScape;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +78,8 @@ public class MainActivity extends Activity {
 //        scrollLayout = new ScrollLayout(this, itemsData);
 
         scrollLayout = new ScrollLayout(this, mainActivity);
+
+        landScape = new LandScape(this, mainActivity, scrollLayout);
 
         // music backend part of music nav
         musicUtils = new MusicUtils(this);

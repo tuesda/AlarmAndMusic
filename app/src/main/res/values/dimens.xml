@@ -2,4 +2,38 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="windmill_bottom">71px</dimen>
+    <dimen name="windmill_left">127px</dimen>
+    <dimen name="windmill_width">156px</dimen>
+    <dimen name="windmill_height">233px</dimen>
+
+    <dimen name="windmill_proof_h">59px</dimen>
+    <dimen name="windmill_proof_w">116px</dimen>
+    <dimen name="windmill_proof_left">147px</dimen>
+    <dimen name="windmill_proof_bottom">304px</dimen>
+
+    <dimen name="wave_3_w">326px</dimen>
+    <dimen name="wave_3_h">42px</dimen>
+    <dimen name="wave_3_left">39px</dimen>
+    <dimen name="wave_3_bottom">68px</dimen>
+
+    <dimen name="wind_fan_w">368px</dimen>
+    <dimen name="wind_fan_h">368px</dimen>
+    <dimen name="wind_fan_left">21px</dimen>
+    <dimen name="wind_fan_bottom">142px</dimen>
+
+    <dimen name="mountain_far_w">806px</dimen>
+    <dimen name="mountain_far_h">161px</dimen>
+    <dimen name="mountain_far_left">274px</dimen>
+    <dimen name="mountain_far_bottom">201px</dimen>
+
+    <dimen name="mountain_near_w">640px</dimen>
+    <dimen name="mountain_near_h">60px</dimen>
+    <dimen name="mountain_near_left">440px</dimen>
+    <dimen name="mountain_near_bottom">201px</dimen>
+
+    <dimen name="wave_4_w">271px</dimen>
+    <dimen name="wave_4_h">27px</dimen>
+    <dimen name="wave_4_left">748px</dimen>
+    <dimen name="wave_4_bottom">105px</dimen>
 </resources>

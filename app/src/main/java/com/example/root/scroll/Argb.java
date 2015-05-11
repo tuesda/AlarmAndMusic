@@ -57,6 +57,14 @@ public class Argb {
             b = Integer.parseInt(color.substring(6, 8), 16);
         }
     }
+    public Argb(int a, int r, int g, int b) {
+        if (isColorValue(a) && isColorValue(r) && isColorValue(g) && isColorValue(b)) {
+            this.a = a;
+            this.r = r;
+            this.g = g;
+            this.b = b;
+        }
+    }
 
     public int getA() {
         return a;

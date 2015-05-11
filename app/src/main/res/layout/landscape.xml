@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/mountain_far_bottom"
+        android:layout_marginLeft="@dimen/mountain_far_left"
+        android:id="@+id/mountain_far"
+        android:src="@drawable/mountain_far"
+        android:layout_width="@dimen/mountain_far_w"
+        android:layout_height="@dimen/mountain_far_h" />
+
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/mountain_near_bottom"
+        android:layout_marginLeft="@dimen/mountain_near_left"
+        android:id="@+id/mountain_near"
+        android:src="@drawable/mountain_near"
+        android:layout_width="@dimen/mountain_near_w"
+        android:layout_height="@dimen/mountain_near_h" />
+
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/windmill_proof_bottom"
+        android:layout_marginLeft="@dimen/windmill_proof_left"
+        android:id="@+id/windmill_proof"
+        android:src="@drawable/windmill_proof"
+        android:layout_width="@dimen/windmill_proof_w"
+        android:layout_height="@dimen/windmill_proof_h" />
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/windmill_bottom"
+        android:layout_marginLeft="@dimen/windmill_left"
+        android:id="@+id/windmill_wall"
+        android:src="@drawable/windmill_wall"
+        android:layout_width="@dimen/windmill_width"
+        android:layout_height="@dimen/windmill_height" />
+
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/wave_3_bottom"
+        android:layout_marginLeft="@dimen/wave_3_left"
+        android:id="@+id/wave_3"
+        android:src="@drawable/wave_3"
+        android:layout_width="@dimen/wave_3_w"
+        android:layout_height="@dimen/wave_3_h" />
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/wind_fan_bottom"
+        android:layout_marginLeft="@dimen/wind_fan_left"
+        android:id="@+id/wind_fan"
+        android:src="@drawable/wind_fan"
+        android:layout_width="@dimen/wind_fan_w"
+        android:layout_height="@dimen/wind_fan_h" />
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/wave_4_bottom"
+        android:layout_marginLeft="@dimen/wave_4_left"
+        android:id="@+id/wave_4"
+        android:src="@drawable/wave_4"
+        android:layout_width="@dimen/wave_4_w"
+        android:layout_height="@dimen/wave_4_h" />
+
+
+
+</RelativeLayout>

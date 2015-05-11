@@ -15,17 +15,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <View
-            android:layout_weight="1"
+            android:layout_weight="101"
             android:id="@+id/scroll_back_sky"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <View
-            android:layout_weight="9"
+            android:layout_weight="960"
             android:id="@+id/scroll_back_sea"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </LinearLayout>
+    
+    <RelativeLayout
+        android:id="@+id/things_front"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </RelativeLayout>
 
     <TextView
         android:background="#40000000"
