@@ -2,6 +2,10 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="sea_height">202px</dimen>
+    <dimen name="sky_bottom">202px</dimen>
+
     <dimen name="windmill_bottom">71px</dimen>
     <dimen name="windmill_left">127px</dimen>
     <dimen name="windmill_width">156px</dimen>
@@ -25,15 +29,30 @@
     <dimen name="mountain_far_w">806px</dimen>
     <dimen name="mountain_far_h">161px</dimen>
     <dimen name="mountain_far_left">274px</dimen>
-    <dimen name="mountain_far_bottom">201px</dimen>
+    <dimen name="mountain_far_bottom">189px</dimen>
 
     <dimen name="mountain_near_w">640px</dimen>
     <dimen name="mountain_near_h">60px</dimen>
     <dimen name="mountain_near_left">440px</dimen>
-    <dimen name="mountain_near_bottom">201px</dimen>
+    <dimen name="mountain_near_bottom">195px</dimen>
 
     <dimen name="wave_4_w">271px</dimen>
     <dimen name="wave_4_h">27px</dimen>
     <dimen name="wave_4_left">748px</dimen>
     <dimen name="wave_4_bottom">105px</dimen>
+
+    <dimen name="house_front_w">336px</dimen>
+    <dimen name="house_front_h">134px</dimen>
+    <dimen name="house_front_left">685px</dimen>
+    <dimen name="house_front_bottom">201px</dimen>
+
+    <dimen name="house_side_w">289px</dimen>
+    <dimen name="house_side_h">141px</dimen>
+    <dimen name="house_side_right">59px</dimen>
+    <dimen name="house_side_bottom">201px</dimen>
+
+    <dimen name="house_window_w">228px</dimen>
+    <dimen name="house_window_h">60px</dimen>
+    <dimen name="house_window_left">749px</dimen>
+    <dimen name="house_window_bottom">234px</dimen>
 </resources>

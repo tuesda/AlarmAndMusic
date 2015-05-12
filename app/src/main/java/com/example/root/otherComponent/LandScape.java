@@ -1,6 +1,7 @@
 package com.example.root.otherComponent;
 
 import android.content.Context;
+import android.media.Image;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -25,6 +26,15 @@ public class LandScape {
 
     private ImageView windmillWall;
     private ImageView windmillProof;
+    private ImageView windmillFan;
+    private ImageView mountainFar;
+    private ImageView mountainNear;
+    private ImageView wave_3;
+    private ImageView wave_4;
+    private ImageView houseFront;
+    private ImageView houseSide;
+    private ImageView houseWindow;
+
 
 
     public LandScape(Context context, RelativeLayout mainActivity, ScrollLayout scrollLayout) {
@@ -40,16 +50,40 @@ public class LandScape {
         landscape = (RelativeLayout)mInflater.inflate(R.layout.landscape, null);
         windmillWall = (ImageView)landscape.findViewById(R.id.windmill_wall);
         windmillProof = (ImageView)landscape.findViewById(R.id.windmill_proof);
+        windmillFan = (ImageView)landscape.findViewById(R.id.wind_fan);
+
+        mountainFar = (ImageView)landscape.findViewById(R.id.mountain_far);
+        mountainNear = (ImageView)landscape.findViewById(R.id.mountain_near);
+
+        wave_3 = (ImageView)landscape.findViewById(R.id.wave_3);
+        wave_4 = (ImageView)landscape.findViewById(R.id.wave_4);
+
+        houseFront = (ImageView)landscape.findViewById(R.id.house_front);
+        houseSide = (ImageView)landscape.findViewById(R.id.house_side);
+        houseWindow = (ImageView)landscape.findViewById(R.id.house_window);
 
         scrollLayout.setRefreshLandScape(new ScrollLayout.RefreshLandScape() {
             @Override
-            public void refreshWindmillWall(int color) {
-                windmillWall.setColorFilter(color);
+            public void refreshWindmill(int wallColor, int proofColor, int fanColor) {
+                windmillWall.setColorFilter(wallColor);
+                windmillProof.setColorFilter(proofColor);
+                windmillFan.setColorFilter(fanColor);
             }
 
             @Override
-            public void refreshWindmillProof(int color) {
-                windmillProof.setColorFilter(color);
+            public void refreshWave(int threeColor, int fourColor) {
+
+            }
+
+            @Override
+            public void refreshMountain(int far, int near) {
+                mountainFar.setColorFilter(far);
+                mountainNear.setColorFilter(near);
+            }
+
+            @Override
+            public void refreshHouse(int front, int side, int window) {
+
             }
         });
 

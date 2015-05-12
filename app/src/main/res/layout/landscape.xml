@@ -64,4 +64,33 @@
 
 
 
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/house_side_bottom"
+        android:layout_marginRight="@dimen/house_side_right"
+        android:layout_alignParentRight="true"
+        android:id="@+id/house_side"
+        android:src="@drawable/house_side"
+        android:layout_width="@dimen/house_side_w"
+        android:layout_height="@dimen/house_side_h" />
+
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/house_front_bottom"
+        android:layout_marginLeft="@dimen/house_front_left"
+        android:id="@+id/house_front"
+        android:src="@drawable/house_front"
+        android:layout_width="@dimen/house_front_w"
+        android:layout_height="@dimen/house_front_h" />
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/house_window_bottom"
+        android:layout_marginLeft="@dimen/house_window_left"
+        android:id="@+id/house_window"
+        android:src="@drawable/house_window"
+        android:layout_width="@dimen/house_window_w"
+        android:layout_height="@dimen/house_window_h" />
+
+
+
 </RelativeLayout>

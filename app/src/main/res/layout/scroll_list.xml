@@ -10,22 +10,22 @@
         android:footerDividersEnabled="false"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"></ListView>
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <View
-            android:layout_weight="101"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/sky_bottom"
             android:id="@+id/scroll_back_sky"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <View
-            android:layout_weight="960"
+            android:layout_alignParentBottom="true"
             android:id="@+id/scroll_back_sea"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="@dimen/sea_height" />
 
-    </LinearLayout>
+    </RelativeLayout>
     
     <RelativeLayout
         android:id="@+id/things_front"

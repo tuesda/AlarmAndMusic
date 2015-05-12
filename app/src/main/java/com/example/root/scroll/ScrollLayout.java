@@ -39,6 +39,7 @@ public class ScrollLayout {
 
     private boolean isReady = true;
 
+
     private Argb beginTop;
     private Argb beginBottom;
     private Argb finalTop;
@@ -54,6 +55,15 @@ public class ScrollLayout {
 
     private Argb windmillProofBegin;
     private Argb windmillProofFinal;
+
+    private Argb windmillFanBegin;
+    private Argb windmillFanFinal;
+
+    private Argb mountainFarBegin;
+    private Argb mountainFarFinal;
+
+    private Argb mountainNearBegin;
+    private Argb mountainNearFinal;
 
     private int hourZone;
     private boolean isHZchanged; // check is the hour zone changed
@@ -100,22 +110,28 @@ public class ScrollLayout {
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 display_debug.setText(firstVisibleItem + "/" + (totalItemCount - ITEMS_IN_VISIBLE));
-                int curHourZone = firstVisibleItem / 60;
-                if ((curHourZone != hourZone || hourZone == 0) && curHourZone < 24) {
-                    hourZone = curHourZone;
-                    isHZchanged = true;
+                if (firstVisibleItem == totalItemCount - ITEMS_IN_VISIBLE) {
+                    lv.setSelection(0);
+                } else if (false) {//firstVisibleItem == 0) {
+                    lv.setSelection(totalItemCount-ITEMS_IN_VISIBLE-1);
                 } else {
-                    isHZchanged = false;
-                }
-                updateBF(firstVisibleItem); // update begin_top begin_bottom final_top final_bottom
+                    int curHourZone = firstVisibleItem / 60;
+                    if ((curHourZone != hourZone || hourZone == 0) && curHourZone < 24) {
+                        hourZone = curHourZone;
+                        isHZchanged = true;
+                    } else {
+                        isHZchanged = false;
+                    }
+                    updateBF(firstVisibleItem); // update begin_top begin_bottom final_top final_bottom
 
-                time = getCurTime(firstVisibleItem);
-                curTimeV.setText(time.toString());
+                    time = getCurTime(firstVisibleItem);
+                    curTimeV.setText(time.toString());
 
-                refreshLand(firstVisibleItem);
+                    refreshLand(firstVisibleItem);
 
-                if (isReady) {
-                    refreshBg(firstVisibleItem);
+                    if (isReady) {
+                        refreshBg(firstVisibleItem);
+                    }
                 }
 
             }
@@ -143,13 +159,32 @@ public class ScrollLayout {
             windmillProofBegin = new Argb(ScrollColorValue.getWindmillProofC(time.getHour()));
             windmillProofFinal = null;
             windmillProofFinal = new Argb(ScrollColorValue.getWindmillProofC(time.getHour() + 1 > 23 ? 0 : time.getHour() + 1));
+
+            windmillFanBegin = null;
+            windmillFanBegin = new Argb(ScrollColorValue.getWindmillFanColor(time.getHour()));
+            windmillFanFinal = null;
+            windmillFanFinal = new Argb(ScrollColorValue.getWindmillFanColor(time.getHour() + 1 > 23 ? 0 : time.getHour() + 1));
+
+            mountainFarBegin = null;
+            mountainFarFinal = null;
+            mountainFarBegin = new Argb(ScrollColorValue.getMountainFarColor(time.getHour()));
+            mountainFarFinal = new Argb(ScrollColorValue.getMountainFarColor(time.getHour()+1 > 23 ? 0 : time.getHour()+1));
+
+            mountainNearBegin = null;
+            mountainNearFinal = null;
+            mountainNearBegin = new Argb(ScrollColorValue.getMountainNearColor(time.getHour()));
+            mountainNearFinal = new Argb(ScrollColorValue.getMountainNearColor(time.getHour()+1 > 23 ? 0 : time.getHour() + 1));
         }
         int windmillWallColor = generateColor(firstItem, windmillWallBegin, windmillWallFinal, windmillWallBegin, windmillWallFinal)[0];
 
         int windmillProofColor = generateColor(firstItem, windmillProofBegin, windmillProofFinal, windmillProofBegin, windmillProofFinal)[0];
+        int windmillFanColor = generateColor(firstItem, windmillFanBegin, windmillFanFinal, windmillFanBegin, windmillFanFinal)[0];
+
+        int mountainFarColor = generateColor(firstItem, mountainFarBegin, mountainFarFinal, mountainFarBegin, mountainFarFinal)[0];
+        int mountainNearColor = generateColor(firstItem, mountainNearBegin, mountainNearFinal, mountainNearBegin, mountainNearFinal)[0];
         if (refreshLandScape!=null) {
-            refreshLandScape.refreshWindmillWall(windmillWallColor);
-            refreshLandScape.refreshWindmillProof(windmillProofColor);
+            refreshLandScape.refreshWindmill(windmillWallColor, windmillProofColor, windmillFanColor);
+            refreshLandScape.refreshMountain(mountainFarColor, mountainNearColor);
         }
     }
 
@@ -283,7 +318,9 @@ public class ScrollLayout {
 
 
     public interface RefreshLandScape {
-        void refreshWindmillWall(int color);
-        void refreshWindmillProof(int color);
+        void refreshWindmill(int wallColor, int proofColor, int fanColor);
+        void refreshWave(int threeColor, int fourColor);
+        void refreshMountain(int far, int near);
+        void refreshHouse(int front, int side, int window);
     }
 }
