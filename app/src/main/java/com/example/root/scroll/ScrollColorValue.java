@@ -217,8 +217,104 @@ public class ScrollColorValue {
             "ff091d30", // 23
     };
 
+
+
     public static String getMountainNearColor(int hour) {
         return mountainNearColors[hour];
+    }
+
+    private static final String[] houseFrontColors = {
+            "ff071726", // 0
+            "ff071726", // 1
+            "ff111c44", // 2
+            "ff23275d", // 3
+            "ff444262", // 4
+            "ff9b84a6", // 5
+            "fff8dbdf", // 6
+            "fff4f1d5", // 7
+            "fff3efee", // 8
+            "fff3efee", // 9
+            "fff3efee", // 10
+            "fff3efee", // 11
+            "fff3efee", // 12
+            "ffd8d7d7", // 13
+            "ffd8d7d7", // 14
+            "ff90938e", // 15
+            "ffd8d7d7", // 16
+            "ffd9d1b1", // 17
+            "ffe3b98d", // 18
+            "ff538388", // 19
+            "ff588576", // 20
+            "ff3f6d77", // 21
+            "ff173047", // 22
+            "ff071726", // 23
+
+    };
+
+    public static String getHouseFron(int hour) {
+        return houseFrontColors[hour];
+    }
+
+    private static final String[] houseSideColors = {
+            "ff0a1d2f", // 0
+            "ff0a1d2f", // 1
+            "ff1c2959", // 2
+            "ff32366c", // 3
+            "ff535171", // 4
+            "ffad97b8", // 5
+            "ffe0b7bc", // 6
+            "ffc0bb96", // 7
+            "ffe1d3ce", // 8
+            "ffe1d3ce", // 9
+            "ffe1d3ce", // 10
+            "ffe1d3ce", // 11
+            "ffe1d3ce", // 12
+            "ffc2c0c0", // 13
+            "ffc2c0c0", // 14
+            "ff858883", // 15
+            "ffc2c0c0", // 16
+            "ffeee8cf", // 17
+            "fff1cfab", // 18
+            "ff5f9095", // 19
+            "ff4b7668", // 20
+            "ff37636d", // 21
+            "ff28425e", // 22
+            "ff0a1d2f", // 23
+    };
+
+    public static String getHouseSideColor(int hour) {
+        return houseSideColors[hour];
+    }
+
+    private static final String[] houseWindowColors = {
+            "ff071726", // 0
+            "ff071726", // 1
+            "ff071726", // 2
+            "ff0c1f31", // 3
+            "ff27263e", // 4
+            "ff705b7a", // 5
+            "ff636566", // 6
+            "ff636566", // 7
+            "ff636566", // 8
+            "ff636566", // 9
+            "ff636566", // 10
+            "ff636566", // 11
+            "ff636566", // 12
+            "ff636566", // 13
+            "ff636566", // 14
+            "ff636566", // 15
+            "ff636566", // 16
+            "ff636566", // 17
+            "ff636566", // 18
+            "ffbeb17c", // 19
+            "fff5e190", // 20
+            "fff5e190", // 21
+            "ff0c1f31", // 22
+            "ff091b2c", // 23
+    };
+
+    public static String getHouseWindowC(int hour) {
+        return houseWindowColors[hour];
     }
 
     public static class ColorRange {

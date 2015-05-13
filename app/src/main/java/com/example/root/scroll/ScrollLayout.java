@@ -65,6 +65,15 @@ public class ScrollLayout {
     private Argb mountainNearBegin;
     private Argb mountainNearFinal;
 
+    private Argb houseFrontBegin;
+    private Argb houseFrontFinal;
+
+    private Argb houseSideBegin;
+    private Argb houseSideFinal;
+
+    private Argb houseWindowBegin;
+    private Argb houseWindowFinal;
+
     private int hourZone;
     private boolean isHZchanged; // check is the hour zone changed
 
@@ -174,6 +183,22 @@ public class ScrollLayout {
             mountainNearFinal = null;
             mountainNearBegin = new Argb(ScrollColorValue.getMountainNearColor(time.getHour()));
             mountainNearFinal = new Argb(ScrollColorValue.getMountainNearColor(time.getHour()+1 > 23 ? 0 : time.getHour() + 1));
+
+            houseFrontBegin = null;
+            houseFrontFinal = null;
+            houseFrontBegin = new Argb(ScrollColorValue.getHouseFron(time.getHour()));
+            houseFrontFinal = new Argb(ScrollColorValue.getHouseFron(time.getHour() + 1 > 23 ? 0 : time.getHour() + 1));
+
+            houseSideBegin = null;
+            houseSideFinal = null;
+            houseSideBegin = new Argb(ScrollColorValue.getHouseSideColor(time.getHour()));
+            houseSideFinal = new Argb(ScrollColorValue.getHouseSideColor(time.getHour() + 1 > 23 ? 0 : time.getHour() + 1));
+
+            houseWindowBegin = null;
+            houseWindowFinal = null;
+            houseWindowBegin = new Argb(ScrollColorValue.getHouseWindowC(time.getHour()));
+            houseWindowFinal = new Argb(ScrollColorValue.getHouseWindowC(time.getHour() + 1 > 23 ? 0 : time.getHour() + 1));
+
         }
         int windmillWallColor = generateColor(firstItem, windmillWallBegin, windmillWallFinal, windmillWallBegin, windmillWallFinal)[0];
 
@@ -182,9 +207,15 @@ public class ScrollLayout {
 
         int mountainFarColor = generateColor(firstItem, mountainFarBegin, mountainFarFinal, mountainFarBegin, mountainFarFinal)[0];
         int mountainNearColor = generateColor(firstItem, mountainNearBegin, mountainNearFinal, mountainNearBegin, mountainNearFinal)[0];
+
+        int houseFrontColor = generateColor(firstItem, houseFrontBegin, houseFrontFinal, houseFrontBegin, houseFrontFinal)[0];
+        int houseSideColor = generateColor(firstItem, houseSideBegin, houseSideFinal, houseSideBegin, houseSideFinal)[0];
+        int houseWindowColor = generateColor(firstItem, houseWindowBegin, houseWindowFinal, houseWindowBegin, houseWindowFinal)[0];
+
         if (refreshLandScape!=null) {
             refreshLandScape.refreshWindmill(windmillWallColor, windmillProofColor, windmillFanColor);
             refreshLandScape.refreshMountain(mountainFarColor, mountainNearColor);
+            refreshLandScape.refreshHouse(houseFrontColor, houseSideColor, houseWindowColor);
         }
     }
 

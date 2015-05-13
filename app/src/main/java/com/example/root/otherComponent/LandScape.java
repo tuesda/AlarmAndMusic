@@ -83,7 +83,9 @@ public class LandScape {
 
             @Override
             public void refreshHouse(int front, int side, int window) {
-
+                houseFront.setColorFilter(front);
+                houseSide.setColorFilter(side);
+                houseWindow.setColorFilter(window);
             }
         });
 
@@ -92,9 +94,7 @@ public class LandScape {
 
 
 
-        Display mDisplay = ((MainActivity)context).getWindowManager().getDefaultDisplay();
 
-        Log.i("zhanglei-landscape", mDisplay.getWidth() + "---" + mDisplay.getHeight());
 
     }
 
