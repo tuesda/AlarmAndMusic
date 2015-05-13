@@ -36,6 +36,14 @@
         android:src="@drawable/windmill_wall"
         android:layout_width="@dimen/windmill_width"
         android:layout_height="@dimen/windmill_height" />
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/windmill_window_bottom"
+        android:layout_marginLeft="@dimen/windmill_window_left"
+        android:id="@+id/windmill_window"
+        android:src="@drawable/windmill_window"
+        android:layout_width="@dimen/windmill_window_w"
+        android:layout_height="@dimen/windmill_window_h" />
 
     <ImageView
         android:layout_alignParentBottom="true"
@@ -90,6 +98,14 @@
         android:src="@drawable/house_window"
         android:layout_width="@dimen/house_window_w"
         android:layout_height="@dimen/house_window_h" />
+
+    <ImageView
+        android:layout_marginTop="@dimen/stars_top"
+        android:layout_marginLeft="@dimen/stars_left"
+        android:id="@+id/stars"
+        android:src="@drawable/stars"
+        android:layout_width="@dimen/stars_w"
+        android:layout_height="@dimen/stars_h" />
 
 
 

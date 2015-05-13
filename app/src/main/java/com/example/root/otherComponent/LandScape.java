@@ -5,6 +5,7 @@ import android.media.Image;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -26,6 +27,7 @@ public class LandScape {
 
     private ImageView windmillWall;
     private ImageView windmillProof;
+    private ImageView windmillWindow;
     private ImageView windmillFan;
     private ImageView mountainFar;
     private ImageView mountainNear;
@@ -34,6 +36,7 @@ public class LandScape {
     private ImageView houseFront;
     private ImageView houseSide;
     private ImageView houseWindow;
+    private ImageView stars;
 
 
 
@@ -50,6 +53,7 @@ public class LandScape {
         landscape = (RelativeLayout)mInflater.inflate(R.layout.landscape, null);
         windmillWall = (ImageView)landscape.findViewById(R.id.windmill_wall);
         windmillProof = (ImageView)landscape.findViewById(R.id.windmill_proof);
+        windmillWindow = (ImageView)landscape.findViewById(R.id.windmill_window);
         windmillFan = (ImageView)landscape.findViewById(R.id.wind_fan);
 
         mountainFar = (ImageView)landscape.findViewById(R.id.mountain_far);
@@ -62,16 +66,29 @@ public class LandScape {
         houseSide = (ImageView)landscape.findViewById(R.id.house_side);
         houseWindow = (ImageView)landscape.findViewById(R.id.house_window);
 
+        stars = (ImageView)landscape.findViewById(R.id.stars);
+
+
         scrollLayout.setRefreshLandScape(new ScrollLayout.RefreshLandScape() {
             @Override
-            public void refreshWindmill(int wallColor, int proofColor, int fanColor) {
+            public void refreshWindmill(int wallColor, int proofColor, int winColor, int fanColor) {
                 windmillWall.setColorFilter(wallColor);
                 windmillProof.setColorFilter(proofColor);
+                windmillWindow.setColorFilter(winColor);
                 windmillFan.setColorFilter(fanColor);
             }
 
             @Override
-            public void refreshWave(int threeColor, int fourColor) {
+            public void refreshWave(int waveColor) {
+                if (waveColor==0) { //0x00000000
+                    wave_3.setVisibility(View.INVISIBLE);
+                    wave_4.setVisibility(View.INVISIBLE);
+                } else {
+                    wave_3.setVisibility(View.VISIBLE);
+                    wave_4.setVisibility(View.VISIBLE);
+                    wave_3.setColorFilter(waveColor);
+                    wave_4.setColorFilter(waveColor);
+                }
 
             }
 
@@ -86,6 +103,11 @@ public class LandScape {
                 houseFront.setColorFilter(front);
                 houseSide.setColorFilter(side);
                 houseWindow.setColorFilter(window);
+            }
+
+            @Override
+            public void setStarsAl(float alaph) {
+                stars.setAlpha(alaph);
             }
         });
 

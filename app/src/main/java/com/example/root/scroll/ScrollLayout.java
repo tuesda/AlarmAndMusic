@@ -3,6 +3,7 @@ package com.example.root.scroll;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.root.main.alarmandmusic.MainActivity;
 import com.example.root.main.alarmandmusic.R;
 
 /**
@@ -74,6 +76,12 @@ public class ScrollLayout {
     private Argb houseWindowBegin;
     private Argb houseWindowFinal;
 
+    private Argb windmillWinBegin;
+    private Argb windmillWinFinal;
+
+    private Argb waveBegin;
+    private Argb waveFinal;
+
     private int hourZone;
     private boolean isHZchanged; // check is the hour zone changed
 
@@ -95,6 +103,8 @@ public class ScrollLayout {
     private void init() {
         scrollContainer = (RelativeLayout)mInflater.inflate(R.layout.scroll_list, null);
         curTimeV = (TextView)scrollContainer.findViewById(R.id.scroll_list_time);
+        Typeface tf = Typeface.createFromAsset(context.getAssets(), "font/custom.ttf");
+        curTimeV.setTypeface(tf);
 
         lv = (ListView)scrollContainer.findViewById(R.id.scroll_list_back);
         lv.setDivider(null);
@@ -199,10 +209,20 @@ public class ScrollLayout {
             houseWindowBegin = new Argb(ScrollColorValue.getHouseWindowC(time.getHour()));
             houseWindowFinal = new Argb(ScrollColorValue.getHouseWindowC(time.getHour() + 1 > 23 ? 0 : time.getHour() + 1));
 
+            windmillWinBegin = null;
+            windmillWinFinal = null;
+            windmillWinBegin = new Argb(ScrollColorValue.getWindmillWinColor(time.getHour()));
+            windmillWinFinal = new Argb(ScrollColorValue.getWindmillWinColor(time.getHour() + 1 > 23 ? 0 : time.getHour() + 1));
+
+            waveBegin = null;
+            waveFinal = null;
+            waveBegin = new Argb(ScrollColorValue.getWave(time.getHour()));
+            waveFinal = new Argb(ScrollColorValue.getWave(time.getHour() + 1 > 23 ? 0 : time.getHour() + 1));
+
         }
         int windmillWallColor = generateColor(firstItem, windmillWallBegin, windmillWallFinal, windmillWallBegin, windmillWallFinal)[0];
-
         int windmillProofColor = generateColor(firstItem, windmillProofBegin, windmillProofFinal, windmillProofBegin, windmillProofFinal)[0];
+        int windmillWinColor = generateColor(firstItem, windmillWinBegin, windmillWinFinal, windmillWinBegin, windmillWinFinal)[0];
         int windmillFanColor = generateColor(firstItem, windmillFanBegin, windmillFanFinal, windmillFanBegin, windmillFanFinal)[0];
 
         int mountainFarColor = generateColor(firstItem, mountainFarBegin, mountainFarFinal, mountainFarBegin, mountainFarFinal)[0];
@@ -212,10 +232,19 @@ public class ScrollLayout {
         int houseSideColor = generateColor(firstItem, houseSideBegin, houseSideFinal, houseSideBegin, houseSideFinal)[0];
         int houseWindowColor = generateColor(firstItem, houseWindowBegin, houseWindowFinal, houseWindowBegin, houseWindowFinal)[0];
 
+        int waveColor = generateColor(firstItem, waveBegin, waveFinal, waveBegin, waveFinal)[0];
+        if (time.getHour() == 2 || time.getHour()==22) {
+            waveColor = 0; // 0x00000000
+        }
+
+        float starsAl = ScrollColorValue.getStarsAl(time.getHour());
+
         if (refreshLandScape!=null) {
-            refreshLandScape.refreshWindmill(windmillWallColor, windmillProofColor, windmillFanColor);
+            refreshLandScape.refreshWindmill(windmillWallColor, windmillProofColor, windmillWinColor, windmillFanColor);
             refreshLandScape.refreshMountain(mountainFarColor, mountainNearColor);
             refreshLandScape.refreshHouse(houseFrontColor, houseSideColor, houseWindowColor);
+            refreshLandScape.refreshWave(waveColor);
+            refreshLandScape.setStarsAl(starsAl);
         }
     }
 
@@ -235,10 +264,7 @@ public class ScrollLayout {
         ScrollColorValue.ColorRange seaBeginColor;
         ScrollColorValue.ColorRange seaFinalColor;
 
-//        int curHourZone = curItem/60;
-//        if ((curHourZone != hourZone || hourZone==0) && curHourZone < 24) {
           if (isHZchanged) {
-//            hourZone = curHourZone;
             beginColor = ScrollColorValue.getColorRange(hourZone);
             finalColor = ScrollColorValue.getColorRange((hourZone + 1) > 23 ? 0 : hourZone + 1);
 
@@ -282,19 +308,9 @@ public class ScrollLayout {
 
 
     private void refreshBg(int firstItem) {
-
-
-
-
-
         int[] skyColor = generateColor(firstItem, beginTop, finalTop, beginBottom, finalBottom);
         int[] seaColor = generateColor(firstItem, seaBeginTop, seaFinalTop, seaBeginBottom, seaFinalBottom);
 
-//        int startColor = Color.argb(cur_start_a, cur_start_r, cur_start_g, cur_start_b);
-//        int endColor = Color.argb(cur_end_a, cur_end_r, cur_end_g, cur_end_b);
-//
-//        int seaStartColor = Color.argb(sea_cur_start_a, sea_cur_start_r, sea_cur_start_g, sea_cur_start_b);
-//        int seaEndColor = Color.argb(sea_cur_end_a, sea_cur_end_r, sea_cur_end_g, sea_cur_end_b);
         setBackColor(skyColor, seaColor);
     }
 
@@ -320,17 +336,6 @@ public class ScrollLayout {
         return new int[]{start, end};
 
 
-//        int sea_cur_start_a = seaBeginTop.getA() + (((seaFinalTop.getA()-seaBeginTop.getA()) * cur_num) / 60);
-//        int sea_cur_start_r = seaBeginTop.getR() + (((seaFinalTop.getR()-seaBeginTop.getR()) * cur_num) / 60);
-//        int sea_cur_start_g = seaBeginTop.getG() + (((seaFinalTop.getG()-seaBeginTop.getG()) * cur_num) / 60);
-//        int sea_cur_start_b = seaBeginTop.getB() + (((seaFinalTop.getB()-seaBeginTop.getB()) * cur_num) / 60);
-//
-//
-//
-//        int sea_cur_end_a = seaBeginBottom.getA() + (((seaFinalBottom.getA()-seaBeginBottom.getA()) * cur_num) / 60);
-//        int sea_cur_end_r = seaBeginBottom.getR() + (((seaFinalBottom.getR()-seaBeginBottom.getR()) * cur_num) / 60);
-//        int sea_cur_end_g = seaBeginBottom.getG() + (((seaFinalBottom.getG()-seaBeginBottom.getG()) * cur_num) / 60);
-//        int sea_cur_end_b = seaBeginBottom.getB() + (((seaFinalBottom.getB()-seaBeginBottom.getB()) * cur_num) / 60);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -349,9 +354,10 @@ public class ScrollLayout {
 
 
     public interface RefreshLandScape {
-        void refreshWindmill(int wallColor, int proofColor, int fanColor);
-        void refreshWave(int threeColor, int fourColor);
+        void refreshWindmill(int wallColor, int proofColor, int winColor, int fanColor);
+        void refreshWave(int waveColor);
         void refreshMountain(int far, int near);
         void refreshHouse(int front, int side, int window);
+        void setStarsAl(float alaph);
     }
 }

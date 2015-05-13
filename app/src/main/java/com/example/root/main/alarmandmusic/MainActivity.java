@@ -112,14 +112,14 @@ public class MainActivity extends Activity {
 
         musicNavLayout = new MusicNavLayout(this, mainActivity);
 
-        globalWidget = new GlobalWidget(mainActivity, this);
+        // globalWidget = new GlobalWidget(mainActivity, this);
         popWindow = new PopWindow(mainActivity, this);
-        globalWidget.setSettingOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popWindow.addToMain();
-            }
-        });
+//        globalWidget.setSettingOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                popWindow.addToMain();
+//            }
+//        });
 
         // view switch start
 //        viewSwitchLayout = new ViewSwitchLayout(this, mainActivity);

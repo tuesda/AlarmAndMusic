@@ -255,6 +255,101 @@ public class ScrollColorValue {
         return houseFrontColors[hour];
     }
 
+    private static final String[] windmillWindowColors = {
+            "ff03111f", // 0
+            "ff071726", // 1
+            "ff071726", // 2
+            "ff0c1f31", // 3
+            "ff27263e", // 4
+            "ff705b7a", // 5
+            "ff4a4645", // 6
+            "ff4a4645", // 7
+            "ff4a4645", // 8
+            "ff4a4645", // 9
+            "ff4a4645", // 10
+            "ff4a4645", // 11
+            "ff4a4645", // 12
+            "ff4a4645", // 13
+            "ff4a4645", // 14
+            "ff4a4645", // 15
+            "ff4a4645", // 16
+            "ff4a4645", // 17
+            "ff4a4645", // 18
+            "ffbeb17c", // 19
+            "fff5e190", // 20
+            "fff5e190", // 21
+            "ff0c1f31", // 22
+            "ff071726", // 23
+    };
+
+    public static String getWindmillWinColor(int hour) {
+        return windmillWindowColors[hour];
+    }
+
+
+    private static final String[] waveColors = {
+            "00000000", // 0
+            "00000000", // 1
+            "00000000", // 2
+            "ff38427d", // 3
+            "ff696695", // 4
+            "ffb584ae", // 5
+            "fffbdade", // 6
+            "ffc6eff0", // 7
+            "ffbdf3e6", // 8
+            "ffafeefa", // 9
+            "ff99d0f6", // 10
+            "ff7ebcf9", // 11
+            "ff7ebcf9", // 12
+            "ff97d9e2", // 13
+            "ffc2c9c2", // 14
+            "ff8c918c", // 15
+            "ff85c4ce", // 16
+            "ffc4d4ba", // 17
+            "fff8b6b2", // 18
+            "ff6588a9", // 19
+            "ff6cafa0", // 20
+            "ff5d8d9a", // 21
+            "ff304f75", // 22
+            "00000000", // 23
+
+    };
+
+    public static String getWave(int hour) {
+        return waveColors[hour];
+    }
+
+    private static final float[] starsAl = {
+            1, // 00
+            1, // 01
+            1, // 02
+            0.5f, // 03
+            0.5f, // 04
+            0.5f, // 05
+            0.5f, // 06
+            0.5f, // 07
+            0, // 08
+            0, // 09
+            0, // 10
+            0, // 11
+            0, // 12
+            0, // 13
+            0, // 14
+            0, // 15
+            0, // 16
+            0, // 17
+            0, // 18
+            0.5f, // 19
+            0.5f, // 20
+            0.5f, // 21
+            0.5f, // 22
+            0.5f, // 23
+    };
+
+    public static float getStarsAl(int hour) {
+        return starsAl[hour];
+    }
+
     private static final String[] houseSideColors = {
             "ff0a1d2f", // 0
             "ff0a1d2f", // 1

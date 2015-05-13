@@ -24,6 +24,6 @@ public class TimeInDay {
     public String toString() {
         String hourStr = hour < 10 ? "0" + hour : "" + hour;
         String minStr = min < 10 ? "0" + min : "" + min;
-        return hourStr + " : " + minStr;
+        return hourStr + "   " + minStr;
     }
 }

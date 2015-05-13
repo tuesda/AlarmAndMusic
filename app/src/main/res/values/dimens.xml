@@ -55,4 +55,25 @@
     <dimen name="house_window_h">20dp</dimen>
     <dimen name="house_window_left">250dp</dimen>
     <dimen name="house_window_bottom">78dp</dimen>
+
+    <dimen name="windmill_window_w">28dp</dimen>
+    <dimen name="windmill_window_h">67dp</dimen>
+    <dimen name="windmill_window_left">54dp</dimen>
+    <dimen name="windmill_window_bottom">32dp</dimen>
+
+    <dimen name="stars_w">331dp</dimen>
+    <dimen name="stars_h">241dp</dimen>
+    <dimen name="stars_left">12dp</dimen>
+    <dimen name="stars_top">5dp</dimen>
+
+    <dimen name="colon_w">8dp</dimen>
+    <dimen name="colon_h">28dp</dimen>
+    <dimen name="colon_left">176dp</dimen>
+    <dimen name="colon_top">91dp</dimen>
+
+    <dimen name="cur_time_w">190dp</dimen>
+    <dimen name="cur_time_h">64dp</dimen>
+    <dimen name="cur_time_left">85dp</dimen>
+    <dimen name="cur_time_top">63dp</dimen>
+    <dimen name="cur_time_textsize">60sp</dimen>
 </resources>
