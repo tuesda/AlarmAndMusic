@@ -39,6 +39,7 @@ public class LandScape {
     private ImageView houseSide;
     private ImageView houseWindow;
     private ImageView stars;
+    private ImageView btnEdit;
  /*wind_fan animation rotation
      * created by wxk*/
     private Animation windmillfan_anim;
@@ -72,11 +73,15 @@ public class LandScape {
         houseWindow = (ImageView)landscape.findViewById(R.id.house_window);
 
         stars = (ImageView)landscape.findViewById(R.id.stars);
+
+        btnEdit = (ImageView)landscape.findViewById(R.id.btn_edit);
+
         /*animation rotation
          * create by wxk*/
         windmillfan_anim= AnimationUtils.loadAnimation(landscape.getContext(), R.anim.windrotate);
         windmillFan.startAnimation(windmillfan_anim);
         /*end*/
+
 
         scrollLayout.setRefreshLandScape(new ScrollLayout.RefreshLandScape() {
             @Override
@@ -127,6 +132,14 @@ public class LandScape {
 
 
 
+    }
+
+    public void setEditOnClickL(View.OnClickListener listener) {
+        btnEdit.setOnClickListener(listener);
+    }
+
+    public void setBtnEditVisible(int visible) {
+        btnEdit.setVisibility(visible);
     }
 
 

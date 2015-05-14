@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.example.root.main.alarmandmusic.R;
+import com.example.root.otherComponent.DensityUtil;
 
 /**
  * Created by zhanglei on 15-4-29.
@@ -48,8 +49,8 @@ public class MusicNavLayout {
 
         musicNavView = (MusicNavView)musicNavLayout.findViewById(R.id.music_nav_animate);
 
-        layoutParams.width = 300;
-        layoutParams.height = 300;
+        layoutParams.width = DensityUtil.dptopx(context,100f);
+        layoutParams.height = DensityUtil.dptopx(context,100f);
 
         mainActivity.addView(musicNavLayout, layoutParams);
 

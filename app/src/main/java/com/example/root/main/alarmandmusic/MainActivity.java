@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
@@ -17,11 +17,9 @@ import android.widget.RelativeLayout;
 import com.example.root.blurringView.ActivityTest;
 import com.example.root.blurringView.PopWindow;
 import com.example.root.musicNav.MusicService;
-import com.example.root.otherComponent.GlobalWidget;
 import com.example.root.otherComponent.LandScape;
 import com.example.root.scroll.*;
 
-import static com.example.root.scroll.ScrollBaseAdapter.*;
 import com.example.root.musicNav.MusicService.*;
 import com.example.root.musicNav.*;
 
@@ -47,8 +45,6 @@ public class MainActivity extends Activity {
     private Intent serviceIntent;
     private ServiceConnection musicServiceConnection;
 
-    // setting and edit Button
-    private GlobalWidget globalWidget;
 
     // blurring staff
     private PopWindow popWindow;
@@ -112,17 +108,24 @@ public class MainActivity extends Activity {
 
         musicNavLayout = new MusicNavLayout(this, mainActivity);
 
-        // globalWidget = new GlobalWidget(mainActivity, this);
         popWindow = new PopWindow(mainActivity, this);
-//        globalWidget.setSettingOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                popWindow.addToMain();
-//            }
-//        });
+        landScape.setEditOnClickL(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                landScape.setBtnEditVisible(View.INVISIBLE);
+                popWindow.addToMain();
+            }
+        });
+        popWindow.setBgOnTouchL(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                popWindow.removeBg();
+                landScape.setBtnEditVisible(View.VISIBLE);
+                return true;
+            }
+        });
 
         // view switch start
-//        viewSwitchLayout = new ViewSwitchLayout(this, mainActivity);
 
 
         // view switch end
@@ -131,6 +134,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+
         if (serviceIntent == null) {
             serviceIntent = new Intent(this, MusicService.class);
             bindService(serviceIntent, musicServiceConnection, Context.BIND_AUTO_CREATE);
