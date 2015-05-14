@@ -7,6 +7,8 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -72,7 +74,7 @@ public class LandScape {
         stars = (ImageView)landscape.findViewById(R.id.stars);
         /*animation rotation
          * create by wxk*/
-        windmillfan_anim=AnimationUtils.loadAnimation(landscape.getContext(), R.anim.windrotate);
+        windmillfan_anim= AnimationUtils.loadAnimation(landscape.getContext(), R.anim.windrotate);
         windmillFan.startAnimation(windmillfan_anim);
         /*end*/
 

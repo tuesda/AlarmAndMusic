@@ -1,4 +1,4 @@
-package com.example.sixorange.otherComp;
+package com.example.root.otherComponent;
 
 import android.content.Context;
 
