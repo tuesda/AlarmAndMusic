@@ -37,7 +37,10 @@ public class LandScape {
     private ImageView houseSide;
     private ImageView houseWindow;
     private ImageView stars;
-
+ /*wind_fan animation rotation
+     * created by wxk*/
+    private Animation windmillfan_anim;
+     /*end*/
 
 
     public LandScape(Context context, RelativeLayout mainActivity, ScrollLayout scrollLayout) {
@@ -67,7 +70,11 @@ public class LandScape {
         houseWindow = (ImageView)landscape.findViewById(R.id.house_window);
 
         stars = (ImageView)landscape.findViewById(R.id.stars);
-
+        /*animation rotation
+         * create by wxk*/
+        windmillfan_anim=AnimationUtils.loadAnimation(landscape.getContext(), R.anim.windrotate);
+        windmillFan.startAnimation(windmillfan_anim);
+        /*end*/
 
         scrollLayout.setRefreshLandScape(new ScrollLayout.RefreshLandScape() {
             @Override
