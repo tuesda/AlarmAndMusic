@@ -81,4 +81,10 @@
     <dimen name="btn_edit_h">15dp</dimen>
     <dimen name="btn_edit_left">11dp</dimen>
     <dimen name="btn_edit_top">14dp</dimen>
+
+    <dimen name="when_of_day_w">52dp</dimen>
+    <dimen name="when_of_day_h">13dp</dimen>
+    <dimen name="when_of_day_left">154dp</dimen>
+    <dimen name="when_of_day_top">56dp</dimen>
+    <dimen name="when_of_day_texts">10sp</dimen>
 </resources>

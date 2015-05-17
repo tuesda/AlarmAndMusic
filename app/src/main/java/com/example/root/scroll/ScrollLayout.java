@@ -23,11 +23,13 @@ import com.example.root.main.alarmandmusic.R;
 public class ScrollLayout {
     private static final int ITEMS_IN_VISIBLE = 33;
     private static final int ITEMS_IN_DAY = 1440+ITEMS_IN_VISIBLE;
+    private static final int TOTAL_ITEMS_IN_DAY = ITEMS_IN_DAY + 1;
 
     private Context context;
     private LayoutInflater mInflater;
 
     private TextView curTimeV;
+    private TextView whenOfD;
 
     private ListView lv;
 
@@ -90,6 +92,8 @@ public class ScrollLayout {
 
     private RefreshLandScape refreshLandScape;
 
+    private boolean isFirst = true;
+
 
 
 
@@ -100,11 +104,15 @@ public class ScrollLayout {
         init();
     }
 
+
     private void init() {
         scrollContainer = (RelativeLayout)mInflater.inflate(R.layout.scroll_list, null);
         curTimeV = (TextView)scrollContainer.findViewById(R.id.scroll_list_time);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "font/custom.ttf");
         curTimeV.setTypeface(tf);
+        whenOfD = (TextView)scrollContainer.findViewById(R.id.when_of_day);
+        whenOfD.setTypeface(tf);
+        whenOfD.setText("Midnight");
 
         lv = (ListView)scrollContainer.findViewById(R.id.scroll_list_back);
         lv.setDivider(null);
@@ -117,7 +125,7 @@ public class ScrollLayout {
         parentLayout.addView(scrollContainer, scrollParams);
 
 
-        ScrollBaseAdapter scrollAdapter = new ScrollBaseAdapter(ITEMS_IN_DAY, context);
+        ScrollBaseAdapter scrollAdapter = new ScrollBaseAdapter(TOTAL_ITEMS_IN_DAY, context);
         lv.setAdapter(scrollAdapter);
 
         lv.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -129,35 +137,92 @@ public class ScrollLayout {
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 display_debug.setText(firstVisibleItem + "/" + (totalItemCount - ITEMS_IN_VISIBLE));
-                if (firstVisibleItem == totalItemCount - ITEMS_IN_VISIBLE) {
-                    lv.setSelection(0);
-                } else if (false) {//firstVisibleItem == 0) {
-                    lv.setSelection(totalItemCount-ITEMS_IN_VISIBLE-1);
-                } else {
-                    int curHourZone = firstVisibleItem / 60;
-                    if ((curHourZone != hourZone || hourZone == 0) && curHourZone < 24) {
-                        hourZone = curHourZone;
-                        isHZchanged = true;
+                int firstItem;
+                int totalItems;
+                if (firstVisibleItem==0) {
+                    if (isFirst) {
+                        lv.setSelection(1);
+                        isFirst = false;
                     } else {
-                        isHZchanged = false;
+                        lv.setSelection(TOTAL_ITEMS_IN_DAY-ITEMS_IN_VISIBLE);
                     }
-                    updateBF(firstVisibleItem); // update begin_top begin_bottom final_top final_bottom
+                } else {
+                    firstItem = firstVisibleItem - 1;
+                    totalItems = totalItemCount - 1;
+                    if (firstItem == totalItems - ITEMS_IN_VISIBLE) {
+                        lv.setSelection(1);
+                    } else {
+                        int curHourZone = firstItem / 60;
+                        if ((curHourZone != hourZone || hourZone == 0) && curHourZone < 24) {
+                            hourZone = curHourZone;
+                            isHZchanged = true;
+                        } else {
+                            isHZchanged = false;
+                        }
+                        updateBF(firstItem); // update begin_top begin_bottom final_top final_bottom
 
-                    time = getCurTime(firstVisibleItem);
-                    curTimeV.setText(time.toString());
+                        time = getCurTime(firstItem);
+                        curTimeV.setText(time.toString());
+                        updateWhenOfD();
 
-                    refreshLand(firstVisibleItem);
+                        refreshLand(firstItem);
 
-                    if (isReady) {
-                        refreshBg(firstVisibleItem);
+                        if (isReady) {
+                            refreshBg(firstItem);
+                        }
                     }
                 }
+                // lv.setSelection(TOTAL_ITEMS_IN_DAY-ITEMS_IN_VISIBLE-1);
 
             }
         });
 
 
 
+    }
+
+    private void updateWhenOfD() {
+        int hour = 0;
+        if (time!=null) hour = time.getHour();
+        switch (hour) {
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+            case 0:
+                whenOfD.setText("Evening");
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+                whenOfD.setText("Midnight");
+                break;
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+                whenOfD.setText("Morning");
+                break;
+            case 12:
+                whenOfD.setText("Midday");
+                break;
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+                whenOfD.setText("Afternoon");
+                break;
+            default:
+                whenOfD.setText("Wrong text");
+
+        }
     }
 
 

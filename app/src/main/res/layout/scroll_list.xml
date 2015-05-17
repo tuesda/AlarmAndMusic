@@ -58,6 +58,15 @@
         android:src="@drawable/colon"
         android:layout_width="@dimen/colon_w"
         android:layout_height="@dimen/colon_h" />
+    <TextView
+        android:textColor="#ffffffff"
+        android:textSize="@dimen/when_of_day_texts"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/when_of_day_top"
+        android:layout_marginLeft="@dimen/when_of_day_left"
+        android:id="@+id/when_of_day"
+        android:layout_width="@dimen/when_of_day_w"
+        android:layout_height="@dimen/when_of_day_h" />
 
 
 </RelativeLayout>

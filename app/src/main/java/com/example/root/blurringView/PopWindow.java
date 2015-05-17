@@ -121,7 +121,7 @@ public class PopWindow {
         return result;
     }
 
-    
+
 
 
     private Bitmap getScreenShot(View view) {
