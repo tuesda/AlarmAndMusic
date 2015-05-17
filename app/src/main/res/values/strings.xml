@@ -6,4 +6,8 @@
     <string name="btn_setting">Setting</string>
     <string name="btn_edit">Edit</string>
     <string name="btn_time_ok">Ok</string>
+    <string name="time_to_sleep_title_text">睡前音乐</string>
+    <string name="left_drawer_title">设置</string>
+    <string name="left_drawer_content_title_text">强制模式</string>
+    <string name="left_drawer_content_text">开启此模式后，用户在次日闹钟响铃前使用手机将会出现温馨提示</string>
 </resources>

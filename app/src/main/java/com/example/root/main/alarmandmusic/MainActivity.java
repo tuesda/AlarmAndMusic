@@ -7,15 +7,18 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.example.root.blurringView.ActivityTest;
 import com.example.root.blurringView.PopWindow;
+import com.example.root.drawerNav.LeftDrawerLayout;
 import com.example.root.musicNav.MusicService;
 import com.example.root.otherComponent.LandScape;
 import com.example.root.scroll.*;
@@ -55,6 +58,9 @@ public class MainActivity extends Activity {
     // landscape
     private LandScape landScape;
 
+    private LeftDrawerLayout leftDrawerLayout;
+    private boolean isDrawerOpen = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +70,8 @@ public class MainActivity extends Activity {
     }
 
     private void init() {
+        final DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED); // lock DrawerLayout so it won't be able to open with gestures
 
         RelativeLayout mainActivity = (RelativeLayout)findViewById(R.id.activity_main);
 
@@ -106,14 +114,22 @@ public class MainActivity extends Activity {
         // music service init end
 
 
+        // drawer start
+        final ListView leftDrawer = (ListView)findViewById(R.id.left_drawer);
+        leftDrawerLayout = new LeftDrawerLayout(this, leftDrawer);
+        // drawer stop
+
+
         musicNavLayout = new MusicNavLayout(this, mainActivity);
 
         popWindow = new PopWindow(mainActivity, this);
         landScape.setEditOnClickL(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                landScape.setBtnEditVisible(View.INVISIBLE);
-                popWindow.addToMain();
+                //landScape.setBtnEditVisible(View.INVISIBLE);
+                // popWindow.addToMain();
+                drawerLayout.openDrawer(leftDrawer);
+
             }
         });
         popWindow.setBgOnTouchL(new View.OnTouchListener() {
@@ -125,10 +141,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        // view switch start
 
-
-        // view switch end
     }
     // music backend start**************
     @Override

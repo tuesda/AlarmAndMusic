@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:textColor="@android:color/white"
+        android:id="@+id/time_to_sleep_title"
+        android:layout_marginTop="@dimen/time_to_sleep_content_top"
+        android:layout_marginLeft="@dimen/left_drawer_content_left"
+        android:text="@string/time_to_sleep_title_text"
+        android:textSize="@dimen/time_to_sleep_title_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <SeekBar
+        android:layout_below="@id/time_to_sleep_title"
+        android:layout_marginTop="@dimen/time_to_sleep_content_top"
+        android:layout_marginLeft="@dimen/left_drawer_content_left"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/time_to_sleep_seek"
+        android:max="60"
+        android:progress="5"
+        android:progressTint="#ffffffff"
+        android:progressBackgroundTint="#ff000000"
+         />
+
+    <TextView
+        android:textColor="@android:color/white"
+        android:id="@+id/time_to_sleep_value"
+        android:layout_below="@id/time_to_sleep_seek"
+        android:layout_marginTop="@dimen/time_to_sleep_content_top"
+        android:layout_marginLeft="@dimen/left_drawer_content_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

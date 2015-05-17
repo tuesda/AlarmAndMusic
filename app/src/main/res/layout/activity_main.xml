@@ -1,23 +1,42 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activity_main"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"  tools:context=".MainActivity">
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
-    <!--<android.support.v4.view.ViewPager-->
-        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--android:id="@+id/pager"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" >-->
+    <RelativeLayout
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <!--<android.support.v4.view.PagerTabStrip-->
-            <!--android:id="@+id/pager_header"-->
+        <!--<android.support.v4.view.ViewPager-->
+            <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+            <!--android:id="@+id/pager"-->
             <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="bottom"-->
-            <!--android:textColor="#000"-->
+            <!--android:layout_height="match_parent" >-->
 
-            <!--/>-->
+            <!--<android.support.v4.view.PagerTabStrip-->
+                <!--android:id="@+id/pager_header"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="bottom"-->
+                <!--android:textColor="#000"-->
 
-    <!--</android.support.v4.view.ViewPager>-->
+                <!--/>-->
 
-</RelativeLayout>
+        <!--</android.support.v4.view.ViewPager>-->
+
+    </RelativeLayout>
+    <ListView
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/white"
+        android:dividerHeight="1dp"
+        android:background="#40000000"
+        android:id="@+id/left_drawer"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"></ListView>
+
+
+</android.support.v4.widget.DrawerLayout>

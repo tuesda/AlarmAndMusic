@@ -87,4 +87,16 @@
     <dimen name="when_of_day_left">154dp</dimen>
     <dimen name="when_of_day_top">56dp</dimen>
     <dimen name="when_of_day_texts">10sp</dimen>
+
+    <dimen name="left_drawer_content_left">10dp</dimen>
+    <dimen name="left_drawer_content_right">10dp</dimen>
+    <dimen name="time_to_sleep_content_top">10dp</dimen>
+    <dimen name="time_to_sleep_title_size">15sp</dimen>
+
+    <dimen name="left_drawer_title_size">20sp</dimen>
+    <dimen name="left_drawer_content_title_size">12sp</dimen>
+    <dimen name="left_drawer_content_size">10sp</dimen>
+
+    <dimen name="left_drawer_content_top">10dp</dimen>
+    <dimen name="left_drawer_content_w">100dp</dimen>
 </resources>

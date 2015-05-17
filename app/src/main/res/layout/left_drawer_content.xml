@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <TextView
+        android:layout_marginTop="@dimen/left_drawer_content_top"
+        android:layout_marginLeft="@dimen/left_drawer_content_left"
+        android:textSize="@dimen/left_drawer_content_title_size"
+        android:id="@+id/left_drawer_content_title"
+        android:text="@string/left_drawer_content_title_text"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:textColor="@android:color/white"
+        android:layout_below="@id/left_drawer_content_title"
+        android:layout_marginTop="@dimen/left_drawer_content_top"
+        android:layout_marginLeft="@dimen/left_drawer_content_left"
+        android:textSize="@dimen/left_drawer_content_size"
+        android:id="@+id/left_drawer_content"
+        android:text="@string/left_drawer_content_text"
+        android:layout_width="@dimen/left_drawer_content_w"
+        android:layout_height="wrap_content" />
+    <CheckBox
+        android:shadowColor="@android:color/white"
+        android:layout_below="@id/left_drawer_content_title"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/left_drawer_content_top"
+        android:layout_marginRight="@dimen/left_drawer_content_right"
+        android:id="@+id/left_drawer_content_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
