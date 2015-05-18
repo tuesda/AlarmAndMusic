@@ -115,6 +115,12 @@
         android:src="@drawable/btn_edit"
         android:layout_width="@dimen/btn_edit_w"
         android:layout_height="@dimen/btn_edit_h" />
+		
+	<com.example.root.otherComponent.WaveView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:background="#ADD8E6" />
 
 
 
