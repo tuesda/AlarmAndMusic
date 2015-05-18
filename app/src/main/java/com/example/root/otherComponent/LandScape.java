@@ -80,8 +80,9 @@ public class LandScape {
          * create by wxk*/
         windmillfan_anim= AnimationUtils.loadAnimation(landscape.getContext(), R.anim.windrotate);
         windmillFan.startAnimation(windmillfan_anim);
+		slideview(0,100);
         /*end*/
-
+       
 
         scrollLayout.setRefreshLandScape(new ScrollLayout.RefreshLandScape() {
             @Override
@@ -141,7 +142,43 @@ public class LandScape {
     public void setBtnEditVisible(int visible) {
         btnEdit.setVisibility(visible);
     }
+	
+   /* created by wxk on 2015-5-17
+    * translate imiation*/
+    public void slideview(final float p1, final float p2) {
 
+		TranslateAnimation wave3_translate = new TranslateAnimation(p1, p2, 0, 0);
+		wave3_translate.setInterpolator(new AccelerateDecelerateInterpolator());
+		wave3_translate.setDuration(3000);
+		wave3_translate.setStartOffset(100);
+		wave3_translate.setRepeatCount(Animation.INFINITE);
+		wave3_translate.setRepeatMode(Animation.REVERSE);
+		wave3_translate.setAnimationListener(new Animation.AnimationListener() {
 
+			@Override
+			public void onAnimationStart(Animation animation) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				// TODO Auto-generated method stub
+				int left = wave_3.getLeft() + (int) (p2 - p1);
+				int top = wave_3.getTop();
+				int width = wave_3.getWidth();
+				int height = wave_3.getHeight();
+				wave_3.clearAnimation();
+				wave_3.layout(left, top, left + width, top + height);
+			}
+		});
+		wave_3.startAnimation(wave_translate);
+	}
 
 }
