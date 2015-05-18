@@ -1,5 +1,7 @@
 package com.example.root.scroll;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
@@ -10,12 +12,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.root.main.alarmandmusic.MainActivity;
 import com.example.root.main.alarmandmusic.R;
+import com.example.root.otherComponent.DensityUtil;
 
 /**
  * Created by zhanglei on 15/5/10.
@@ -35,6 +39,8 @@ public class ScrollLayout {
 
     private View scrollBackSky;
     private View scrollBackSea;
+
+    private ImageView timeColon;
 
     private TextView display_debug;
 
@@ -91,6 +97,7 @@ public class ScrollLayout {
 
 
     private RefreshLandScape refreshLandScape;
+    private OnSwipListener onSwipListener;
 
     private boolean isFirst = true;
 
@@ -117,6 +124,8 @@ public class ScrollLayout {
         lv = (ListView)scrollContainer.findViewById(R.id.scroll_list_back);
         lv.setDivider(null);
 
+        timeColon = (ImageView)scrollContainer.findViewById(R.id.colon);
+
         scrollBackSky = scrollContainer.findViewById(R.id.scroll_back_sky);
         scrollBackSea = scrollContainer.findViewById(R.id.scroll_back_sea);
 
@@ -131,7 +140,23 @@ public class ScrollLayout {
         lv.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
-
+                switch (i) {
+                    case SCROLL_STATE_FLING:
+                        if (onSwipListener!=null) {
+                            onSwipListener.setInvisible();
+                        }
+                        break;
+                    case SCROLL_STATE_IDLE:
+                        if (onSwipListener!=null) {
+                            onSwipListener.setVisible();
+                        }
+                        break;
+                    case SCROLL_STATE_TOUCH_SCROLL:
+                        if (onSwipListener!=null) {
+                            onSwipListener.setInvisible();
+                        }
+                        break;
+                }
             }
 
             @Override
@@ -228,6 +253,10 @@ public class ScrollLayout {
 
     public void setRefreshLandScape(RefreshLandScape refreshLandScape) {
         this.refreshLandScape = refreshLandScape;
+    }
+
+    public void setOnSwipListener(OnSwipListener listener) {
+        onSwipListener = listener;
     }
 
 
@@ -412,6 +441,25 @@ public class ScrollLayout {
 
     }
 
+    public void downSear(int duration) {
+        ObjectAnimator sea = ObjectAnimator.ofFloat(scrollBackSea, "translationY", 0f, DensityUtil.dptopx(context, 170));
+        sea.setDuration(duration);
+        sea.start();
+    }
+    public void folderSky(int duration) {
+        ObjectAnimator folder = ObjectAnimator.ofFloat(scrollBackSky, "scaleY", 1f, 0.2f);
+        ObjectAnimator up = ObjectAnimator.ofFloat(scrollBackSky, "translationY", 0f, -DensityUtil.dptopx(context,180));
+        ObjectAnimator time = ObjectAnimator.ofFloat(curTimeV, "translationX", 0f, -DensityUtil.dptopx(context, 95));
+        ObjectAnimator timeScaleY = ObjectAnimator.ofFloat(curTimeV, "scaleY", 1f, 0.8f);
+        ObjectAnimator timeScaleX = ObjectAnimator.ofFloat(curTimeV, "scaleX", 1f, 0.8f);
+        ObjectAnimator whenInDay = ObjectAnimator.ofFloat(whenOfD, "translationX", 0f, -DensityUtil.dptopx(context, 140));
+        ObjectAnimator colonAni = ObjectAnimator.ofFloat(timeColon, "translationX", 0f, -DensityUtil.dptopx(context, 95));
+        AnimatorSet sky = new AnimatorSet();
+        sky.play(folder).with(up).with(time).with(timeScaleY).with(timeScaleX).with(whenInDay).with(colonAni);
+        sky.setDuration(duration);
+        sky.start();
+    }
+
 
     public TimeInDay getTime() {
         return time;
@@ -424,5 +472,10 @@ public class ScrollLayout {
         void refreshMountain(int far, int near);
         void refreshHouse(int front, int side, int window);
         void setStarsAl(float alaph);
+    }
+
+    public interface OnSwipListener {
+        void setVisible();
+        void setInvisible();
     }
 }

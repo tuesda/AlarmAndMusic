@@ -99,4 +99,14 @@
 
     <dimen name="left_drawer_content_top">10dp</dimen>
     <dimen name="left_drawer_content_w">100dp</dimen>
+
+    <dimen name="btns_pick_time_left">100dp</dimen>
+    <dimen name="btns_pick_time_bottom">200dp</dimen>
+    <dimen name="btns_pick_time_h">80dp</dimen>
+
+    <dimen name="weeks_pick_w">230dp</dimen>
+    <dimen name="weeks_pick_h">30dp</dimen>
+
+    <dimen name="btn_time_ok_w">45dp</dimen>
+    <dimen name="btn_time_ok_h">30dp</dimen>
 </resources>
