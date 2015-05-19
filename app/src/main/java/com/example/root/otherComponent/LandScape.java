@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import com.example.root.main.alarmandmusic.MainActivity;
 import com.example.root.main.alarmandmusic.R;
 import com.example.root.scroll.ScrollLayout;
+import com.example.root.scroll.TimeInDay;
 
 /**
  * Created by zhanglei on 15/5/12.
@@ -46,7 +47,7 @@ public class LandScape {
     private ImageView btnEdit;
  /*wind_fan animation rotation
      * created by wxk*/
-    private Animation windmillfan_anim;
+    //private Animation windmillfan_anim;
      /*end*/
 
 
@@ -95,8 +96,8 @@ public class LandScape {
 
         /*animation rotation
          * create by wxk*/
-        windmillfan_anim= AnimationUtils.loadAnimation(landscape.getContext(), R.anim.windrotate);
-        windmillFan.startAnimation(windmillfan_anim);
+        //windmillfan_anim= AnimationUtils.loadAnimation(landscape.getContext(), R.anim.windrotate);
+        //windmillFan.startAnimation(windmillfan_anim);
         /*end*/
 
 
@@ -109,6 +110,13 @@ public class LandScape {
         checkFri = (CheckBox)landscape.findViewById(R.id.check_fri);
         checkSat = (CheckBox)landscape.findViewById(R.id.check_sat);
         checkSun = (CheckBox)landscape.findViewById(R.id.check_sun);
+
+        scrollLayout.setOnFanChange(new ScrollLayout.OnFanChange() {
+            @Override
+            public void change(int item) {
+                windmillFan.setRotation(item % 360);
+            }
+        });
 
         scrollLayout.setOnSwipListener(new ScrollLayout.OnSwipListener() {
             @Override

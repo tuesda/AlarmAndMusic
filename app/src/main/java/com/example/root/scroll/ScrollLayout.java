@@ -98,6 +98,7 @@ public class ScrollLayout {
 
     private RefreshLandScape refreshLandScape;
     private OnSwipListener onSwipListener;
+    private OnFanChange onFanChange;
 
     private boolean isFirst = true;
 
@@ -187,6 +188,7 @@ public class ScrollLayout {
                         updateBF(firstItem); // update begin_top begin_bottom final_top final_bottom
 
                         time = getCurTime(firstItem);
+                        updateFan(firstItem);
                         curTimeV.setText(time.toString());
                         updateWhenOfD();
 
@@ -203,6 +205,13 @@ public class ScrollLayout {
         });
 
 
+
+    }
+
+    private void updateFan(int item) {
+        if (onFanChange!=null) {
+            onFanChange.change(item);
+        }
 
     }
 
@@ -258,6 +267,8 @@ public class ScrollLayout {
     public void setOnSwipListener(OnSwipListener listener) {
         onSwipListener = listener;
     }
+
+    public void setOnFanChange(OnFanChange change) { onFanChange = change; }
 
 
     private void refreshLand(int firstItem) {
@@ -477,5 +488,9 @@ public class ScrollLayout {
     public interface OnSwipListener {
         void setVisible();
         void setInvisible();
+    }
+
+    public interface OnFanChange {
+        void change(int item);
     }
 }
