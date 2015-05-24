@@ -2,6 +2,65 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:background="#f0606060"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <View
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/sky_bottom"
+            android:id="@+id/scroll_back_sky"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <View
+            android:layout_alignParentBottom="true"
+            android:id="@+id/scroll_back_sea"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sea_height" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/things_front"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/scroll_list_time"
+        android:layout_marginTop="@dimen/cur_time_top"
+        android:text="current time"
+        android:textColor="#ffffffff"
+        android:textSize="@dimen/cur_time_textsize"
+        android:layout_marginLeft="@dimen/cur_time_left"
+        android:layout_width="@dimen/cur_time_w"
+        android:layout_height="@dimen/cur_time_h" />
+    <ImageView
+        android:layout_marginTop="@dimen/colon_top"
+        android:layout_marginLeft="@dimen/colon_left"
+        android:id="@+id/colon"
+        android:src="@drawable/colon"
+        android:layout_width="@dimen/colon_w"
+        android:layout_height="@dimen/colon_h" />
+    <TextView
+        android:textColor="#ffffffff"
+        android:textSize="@dimen/when_of_day_texts"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/when_of_day_top"
+        android:layout_marginLeft="@dimen/when_of_day_left"
+        android:id="@+id/when_of_day"
+        android:layout_width="@dimen/when_of_day_w"
+        android:layout_height="@dimen/when_of_day_h" />
+
+
+
+
+
+
     <ImageView
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/mountain_far_bottom"

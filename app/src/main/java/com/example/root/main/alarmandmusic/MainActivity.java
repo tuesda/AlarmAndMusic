@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ import com.example.root.musicNav.*;
 
 
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
 
 public class MainActivity extends Activity {
@@ -182,4 +184,6 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
