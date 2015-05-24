@@ -212,47 +212,6 @@ public class LandScape {
 
 
 
-//        scrollLayout.setRefreshLandScape(new ScrollLayout.RefreshLandScape() {
-//            @Override
-//            public void refreshWindmill(int wallColor, int proofColor, int winColor, int fanColor) {
-//                windmillWall.setColorFilter(wallColor);
-//                windmillProof.setColorFilter(proofColor);
-//                windmillWindow.setColorFilter(winColor);
-//                windmillFan.setColorFilter(fanColor);
-//            }
-//
-//            @Override
-//            public void refreshWave(int waveColor) {
-//                if (waveColor==0) { //0x00000000
-//                    wave_3.setVisibility(View.INVISIBLE);
-//                    wave_4.setVisibility(View.INVISIBLE);
-//                } else {
-//                    wave_3.setVisibility(View.VISIBLE);
-//                    wave_4.setVisibility(View.VISIBLE);
-//                    wave_3.setColorFilter(waveColor);
-//                    wave_4.setColorFilter(waveColor);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void refreshMountain(int far, int near) {
-//                mountainFar.setColorFilter(far);
-//                mountainNear.setColorFilter(near);
-//            }
-//
-//            @Override
-//            public void refreshHouse(int front, int side, int window) {
-//                houseFront.setColorFilter(front);
-//                houseSide.setColorFilter(side);
-//                houseWindow.setColorFilter(window);
-//            }
-//
-//            @Override
-//            public void setStarsAl(float alaph) {
-//                stars.setAlpha(alaph);
-//            }
-//        });
 
         RelativeLayout.LayoutParams landParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mainActivity.addView(landscape, landParams);
