@@ -109,4 +109,20 @@
 
     <dimen name="btn_time_ok_w">45dp</dimen>
     <dimen name="btn_time_ok_h">30dp</dimen>
+
+
+    <!-- Following is about alarm item size -->
+    <dimen name="alarm_time_w">134dp</dimen>
+    <dimen name="alarm_time_h">51dp</dimen>
+    <dimen name="alarm_time_left">20dp</dimen>
+    <dimen name="alarm_time_top">30dp</dimen>
+    <dimen name="alarm_time_text">42sp</dimen>
+
+    <dimen name="alarm_when_left">25dp</dimen>
+    <dimen name="alarm_when_top">20dp</dimen>
+    <dimen name="alarm_when_text">8sp</dimen>
+
+    <dimen name="alarm_colon_left">85dp</dimen>
+    <dimen name="alarm_colon_top">45dp</dimen>
+
 </resources>

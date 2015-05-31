@@ -21,6 +21,7 @@ import com.example.root.blurringView.ActivityTest;
 import com.example.root.blurringView.PopWindow;
 import com.example.root.drawerNav.LeftDrawerLayout;
 import com.example.root.musicNav.MusicService;
+import com.example.root.otherComponent.AlarmListLayout;
 import com.example.root.otherComponent.LandScape;
 import com.example.root.scroll.*;
 
@@ -54,14 +55,14 @@ public class MainActivity extends Activity {
     // blurring staff
     private PopWindow popWindow;
 
-    // view switch
-//    private ViewSwitchLayout viewSwitchLayout;
 
     // landscape
     private LandScape landScape;
 
     private LeftDrawerLayout leftDrawerLayout;
     private boolean isDrawerOpen = false;
+
+    private AlarmListLayout alarmListLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,11 +78,6 @@ public class MainActivity extends Activity {
 
         RelativeLayout mainActivity = (RelativeLayout)findViewById(R.id.activity_main);
 
-//        Intent testIntent = new Intent(this, ActionBarTabsPager.class);
-//        startActivity(testIntent);
-
-//        itemsData = ScrollUtils.getItems(NUM_OF_ITEM);
-//        scrollLayout = new ScrollLayout(this, itemsData);
 
         scrollLayout = new ScrollLayout(this, mainActivity);
 
@@ -144,6 +140,10 @@ public class MainActivity extends Activity {
         });
 
 
+//        alarmListLayout = new AlarmListLayout(mainActivity, this);
+
+
+
     }
     // music backend start**************
     @Override
@@ -183,6 +183,11 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void disposeViews() {
+        scrollLayout.dispose();
+        landScape.dispose();
     }
 
 

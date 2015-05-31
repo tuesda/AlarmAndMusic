@@ -1,5 +1,9 @@
 package com.example.root.otherComponent;
 
+import android.graphics.Color;
+
+import com.example.root.scroll.TimeInDay;
+
 /**
  * Created by zhanglei on 15/5/24.
  */
@@ -428,5 +432,85 @@ public class ViewColorGenerator {
 
         private String start;
         private String end;
+    }
+
+
+
+
+    /**
+     * update view whenOfD
+     * @param time
+     */
+    public static String getWhenInDay(TimeInDay time) {
+        int hour = 0;
+        if (time != null) hour = time.getHour();
+        switch (hour) {
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+            case 0:
+                return "Evening";
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+                return "Midnight";
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+                return "Morning";
+            case 12:
+                return "Midday";
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+                return "Afternoon";
+            default:
+                return "Wrong text";
+
+        }
+    }
+
+    /**
+     * Help method used by refreshBackground() method
+     * @param time
+     * @return
+     */
+    public static int[] getTopBtmColor(TimeInDay time) {
+
+        ColorRange colorRange = getColorRange(time.getHour());
+        ColorRange finalColorRange = getColorRange(time.getHour()+1 > 23 ? 0 : time.getHour()+1);
+        Argb startTop = new Argb(colorRange.getStart());
+        Argb startBottom = new Argb(colorRange.getEnd());
+
+        Argb finalTop = new Argb(finalColorRange.getStart());
+        Argb finalBottom = new Argb(finalColorRange.getEnd());
+
+
+
+        int curTopA = ((finalTop.getA() - startTop.getA()) * time.getMin()) / 60 + startTop.getA();
+        int curTopR = ((finalTop.getR() - startTop.getR()) * time.getMin()) / 60 + startTop.getR();
+        int curTopG = ((finalTop.getG() - startTop.getG()) * time.getMin()) / 60 + startTop.getG();
+        int curTopB = ((finalTop.getB() - startTop.getB()) * time.getMin()) / 60 + startTop.getB();
+
+        int top = Color.argb(curTopA, curTopR, curTopG, curTopB);
+
+        int curBtmA = ((finalBottom.getA() - startBottom.getA()) * time.getMin()) / 60 + startBottom.getA();
+        int curBtmR = ((finalBottom.getR() - startBottom.getR()) * time.getMin()) / 60 + startBottom.getR();
+        int curBtmG = ((finalBottom.getG() - startBottom.getG()) * time.getMin()) / 60 + startBottom.getG();
+        int curBtmB = ((finalBottom.getB() - startBottom.getB()) * time.getMin()) / 60 + startBottom.getB();
+
+        int btm = Color.argb(curBtmA, curBtmR, curBtmG, curBtmB);
+
+        return new int[]{top, btm};
     }
 }

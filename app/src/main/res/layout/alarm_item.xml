@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="100dp"
+    android:background="#ff333333"
+    >
+    <TextView
+
+        android:gravity="center"
+        android:id="@+id/alarm_time"
+        android:layout_marginTop="@dimen/alarm_time_top"
+        android:text="18  45"
+        android:textColor="#ffffffff"
+        android:textSize="@dimen/alarm_time_text"
+        android:layout_marginLeft="@dimen/alarm_time_left"
+        android:layout_width="@dimen/alarm_time_w"
+        android:layout_height="@dimen/alarm_time_h" />
+    <ImageView
+        android:layout_marginTop="@dimen/alarm_colon_top"
+        android:layout_marginLeft="@dimen/alarm_colon_left"
+        android:id="@+id/alarm_colon"
+        android:src="@drawable/colon"
+        android:layout_width="@dimen/colon_w"
+        android:layout_height="@dimen/colon_h" />
+    <TextView
+        android:text="morning"
+        android:textColor="#ffffffff"
+        android:textSize="@dimen/alarm_when_text"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/alarm_when_top"
+        android:layout_marginLeft="@dimen/alarm_when_left"
+        android:id="@+id/alarm_when_of_day"
+        android:layout_width="@dimen/when_of_day_w"
+        android:layout_height="@dimen/when_of_day_h" />
+    <CheckBox
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="60dp"
+        android:layout_centerVertical="true"
+        android:id="@+id/alarm_enable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

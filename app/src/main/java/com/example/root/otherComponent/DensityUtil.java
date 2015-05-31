@@ -21,5 +21,13 @@ public class DensityUtil {
 		final float scale=context.getResources().getDisplayMetrics().density;
 		return (int)(pxvalue/scale+0.5f);
 	}
+	public static float pixelsToSp(Context context, float px) {
+		float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+		return px/scaledDensity;
+	}
 
+	public static float spToPx(Context context, float sp) {
+		float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+		return sp * scaledDensity;
+	}
 }

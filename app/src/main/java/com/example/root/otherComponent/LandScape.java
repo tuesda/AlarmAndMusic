@@ -1,10 +1,13 @@
 package com.example.root.otherComponent;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.media.Image;
@@ -12,10 +15,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -24,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.root.main.alarmandmusic.MainActivity;
 import com.example.root.main.alarmandmusic.R;
@@ -163,7 +169,7 @@ public class LandScape {
             public void elapse(TimeInDay time) {
                 refreshBackground(time);
                 refreshCurTime(time);
-                updateWhenOfD(time);
+                whenOfD.setText(ViewColorGenerator.getWhenInDay(time));
                 refreshWindmill(time);
                 refreshWave(time);
                 refreshMountain(time);
@@ -202,10 +208,16 @@ public class LandScape {
             public void onClick(View view) {
                 btnsTimePicker.setVisibility(View.INVISIBLE);
                 isBtnsShow = false;
-                btnEdit.setOnClickListener(null);
+//                btnEdit.setOnClickListener(null);
                 LandscapeAnimator landscapeAnimator = new LandscapeAnimator();
                 landscapeAnimator.downBottom(500);
-                landscapeAnimator.upTop(500);
+
+                int[] phonesizes = getPhoneSize();
+                int btmMargin = phonesizes[1] - DensityUtil.dptopx(context, 100 + 40);
+                int topMargin = DensityUtil.dptopx(context, 40);
+
+
+                landscapeAnimator.upTop(500, btmMargin, topMargin);
             }
         });
 
@@ -222,37 +234,39 @@ public class LandScape {
 
     }
 
+
+    /**
+     * return a series of number represents for phone screen size
+     * @return
+     */
+    private int[] getPhoneSize() {
+        Rect rectangle= new Rect();
+        Window window= ((MainActivity)context).getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+        int statusBarHeight= rectangle.top;
+        int contentViewTop=
+                window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+        int titleBarHeight= contentViewTop - statusBarHeight;
+        int height = rectangle.height();
+
+//        Log.i("zhanglei-size", "StatusBar Height= " + statusBarHeight + ", height = " + height + ",TitleBar Height = " + titleBarHeight);
+        int[] sizes = {statusBarHeight, height, titleBarHeight};
+        return sizes;
+    }
+
+
     /**
      * This method used for refresh backsea and backsky color decided by param time
      * @param time
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void refreshBackground(TimeInDay time) {
-        ViewColorGenerator.ColorRange colorRange = ViewColorGenerator.getColorRange(time.getHour());
-        ViewColorGenerator.ColorRange finalColorRange = ViewColorGenerator.getColorRange(time.getHour()+1 > 23 ? 0 : time.getHour()+1);
 
-        Argb startTop = new Argb(colorRange.getStart());
-        Argb startBottom = new Argb(colorRange.getEnd());
-
-        Argb finalTop = new Argb(finalColorRange.getStart());
-        Argb finalBottom = new Argb(finalColorRange.getEnd());
-
-
-        int[] skyColor = getTopBtmColor(startTop, finalTop, startBottom, finalBottom, time);
+        int[] skyColor = ViewColorGenerator.getTopBtmColor(time);
         GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, skyColor);
         scrollBackSky.setBackground(gd);
 
-        ViewColorGenerator.ColorRange colorRangeSea = ViewColorGenerator.getSeaColorRange(time.getHour());
-        ViewColorGenerator.ColorRange finalColorRangeSea = ViewColorGenerator.getSeaColorRange(time.getHour()+1 > 23 ? 0 : time.getHour() + 1);
-
-        Argb startTopS = new Argb(colorRangeSea.getStart());
-        Argb startBottomS = new Argb(colorRangeSea.getEnd());
-
-        Argb finalTopS = new Argb(finalColorRangeSea.getStart());
-        Argb finalBottomS = new Argb(finalColorRangeSea.getEnd());
-
-        int[] seaColor = getTopBtmColor(startTopS, finalTopS, startBottomS, finalBottomS, time);
-
+        int[] seaColor = ViewColorGenerator.getTopBtmColor(time);
 
         GradientDrawable seaGd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, seaColor);
         scrollBackSea.setBackground(seaGd);
@@ -261,32 +275,7 @@ public class LandScape {
 
     }
 
-    /**
-     * Help method used by refreshBackground() method
-     * @param startTop
-     * @param finalTop
-     * @param startBottom
-     * @param finalBottom
-     * @param time
-     * @return
-     */
-    private int[] getTopBtmColor(Argb startTop, Argb finalTop, Argb startBottom, Argb finalBottom, TimeInDay time) {
-        int curTopA = ((finalTop.getA() - startTop.getA()) * time.getMin()) / 60 + startTop.getA();
-        int curTopR = ((finalTop.getR() - startTop.getR()) * time.getMin()) / 60 + startTop.getR();
-        int curTopG = ((finalTop.getG() - startTop.getG()) * time.getMin()) / 60 + startTop.getG();
-        int curTopB = ((finalTop.getB() - startTop.getB()) * time.getMin()) / 60 + startTop.getB();
 
-        int top = Color.argb(curTopA, curTopR, curTopG, curTopB);
-
-        int curBtmA = ((finalBottom.getA() - startBottom.getA()) * time.getMin()) / 60 + startBottom.getA();
-        int curBtmR = ((finalBottom.getR() - startBottom.getR()) * time.getMin()) / 60 + startBottom.getR();
-        int curBtmG = ((finalBottom.getG() - startBottom.getG()) * time.getMin()) / 60 + startBottom.getG();
-        int curBtmB = ((finalBottom.getB() - startBottom.getB()) * time.getMin()) / 60 + startBottom.getB();
-
-        int btm = Color.argb(curBtmA, curBtmR, curBtmG, curBtmB);
-
-        return new int[]{top, btm};
-    }
 
 
     /**
@@ -297,53 +286,7 @@ public class LandScape {
         curTimeV.setText(time.toString());
     }
 
-    /**
-     * update view whenOfD
-     * @param time
-     */
-    private void updateWhenOfD(TimeInDay time) {
-        int hour = 0;
-        if (time!=null) hour = time.getHour();
-        switch (hour) {
-            case 19:
-            case 20:
-            case 21:
-            case 22:
-            case 23:
-            case 0:
-                whenOfD.setText("Evening");
-                break;
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-                whenOfD.setText("Midnight");
-                break;
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-            case 11:
-                whenOfD.setText("Morning");
-                break;
-            case 12:
-                whenOfD.setText("Midday");
-                break;
-            case 13:
-            case 14:
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-                whenOfD.setText("Afternoon");
-                break;
-            default:
-                whenOfD.setText("Wrong text");
 
-        }
-    }
 
     /**
      * Used for refresh the windmill color: wall proof window fans
@@ -503,6 +446,7 @@ public class LandScape {
         }
 
         /**
+         * Interface used by outside this class
          * Responsible for down Sea view and views related to sea
          * @param duration
          */
@@ -515,37 +459,257 @@ public class LandScape {
         }
 
         /**
+         * Interface used by outside this class
          * Responsible for up and folder sky part view
          * @param duration
+         * @return return the top margin
          */
-        void upTop(int duration) {
-            folderSky(duration);
+        int upTop(int duration, int lastBtm, int lastTop) {
+            int btmMargin = lastBtm;
+
+            folderSky(duration, lastBtm, lastTop);
             ObjectAnimator folder = ObjectAnimator.ofFloat(stars, "scaleY", 1f, 0.2f);
             ObjectAnimator up = ObjectAnimator.ofFloat(stars, "translationY", 0f, -DensityUtil.dptopx(context,60));
             AnimatorSet stars_ani = new AnimatorSet();
             stars_ani.play(folder).with(up);
             stars_ani.setDuration(duration);
             stars_ani.start();
+
+            return btmMargin;
         }
-        void folderSky(int duration) {
-            ObjectAnimator folder = ObjectAnimator.ofFloat(scrollBackSky, "scaleY", 1f, 0.2f);
-            ObjectAnimator up = ObjectAnimator.ofFloat(scrollBackSky, "translationY", 0f, -DensityUtil.dptopx(context,180));
-            ObjectAnimator time = ObjectAnimator.ofFloat(curTimeV, "translationX", 0f, -DensityUtil.dptopx(context, 95));
-            ObjectAnimator timeScaleY = ObjectAnimator.ofFloat(curTimeV, "scaleY", 1f, 0.8f);
-            ObjectAnimator timeScaleX = ObjectAnimator.ofFloat(curTimeV, "scaleX", 1f, 0.8f);
-            ObjectAnimator whenInDay = ObjectAnimator.ofFloat(whenOfD, "translationX", 0f, -DensityUtil.dptopx(context, 140));
-            ObjectAnimator colonAni = ObjectAnimator.ofFloat(timeColon, "translationX", 0f, -DensityUtil.dptopx(context, 95));
+        int folderSky(int duration, int btmMargin, int topMargin) {
+            stars.setVisibility(View.INVISIBLE);
+            AnimatorSet skyAnim = getSkyAnim(btmMargin);
+            AnimatorSet timeAnim = getTimeAnim(topMargin);
+            AnimatorSet colonAnim = getColonAnim(topMargin);
+            AnimatorSet whenAnim = getWhenAnim(topMargin);
+
             AnimatorSet sky = new AnimatorSet();
-            sky.play(folder).with(up).with(time).with(timeScaleY).with(timeScaleX).with(whenInDay).with(colonAni);
+            sky.play(skyAnim).with(timeAnim).with(whenAnim).with(colonAnim);
+
+            sky.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    ((MainActivity)context).disposeViews();
+                    AlarmListLayout alarmListLayout = new AlarmListLayout(mainActivity, context);
+
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+
+                }
+            });
+
             sky.setDuration(duration);
             sky.start();
+
+            return (int) (scrollBackSky.getHeight() * 2.0);
         }
+
+        private AnimatorSet getSkyAnim(int btmMargin) {
+            RelativeLayout.LayoutParams skyParams = (RelativeLayout.LayoutParams)scrollBackSky.getLayoutParams();
+            //ObjectAnimator folder = ObjectAnimator.ofFloat(scrollBackSky, "scaleY", 1f, 0.2f);
+            ValueAnimator animSkyHeight = ValueAnimator.ofInt(scrollBackSky.getMeasuredHeight(), DensityUtil.dptopx(context, 100));
+            //Toast.makeText(context, "init height:" + skyParams.height, Toast.LENGTH_LONG).show();
+            animSkyHeight.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int val = (int) valueAnimator.getAnimatedValue();
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) scrollBackSky.getLayoutParams();
+                    params.height = val;
+                    scrollBackSky.setLayoutParams(params);
+                }
+            });
+
+
+            // ObjectAnimator up = ObjectAnimator.ofFloat(scrollBackSky, "translationY", 0f, -DensityUtil.dptopx(context,180));
+
+            ValueAnimator animSkyMarginB = ValueAnimator.ofInt(skyParams.bottomMargin, btmMargin);
+            animSkyMarginB.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int val = (int) valueAnimator.getAnimatedValue();
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) scrollBackSky.getLayoutParams();
+                    params.bottomMargin = val;
+                    scrollBackSky.setLayoutParams(params);
+                }
+            });
+
+            AnimatorSet sky = new AnimatorSet();
+            sky.play(animSkyHeight).with(animSkyMarginB);
+            return sky;
+        }
+
+
+        /**
+         * helper method for generate the current time view animator
+         * @param topMargin
+         * @return
+         */
+        private AnimatorSet getTimeAnim(int topMargin) {
+            RelativeLayout.LayoutParams timeParams = (RelativeLayout.LayoutParams) curTimeV.getLayoutParams();
+            ValueAnimator timeAniW = ValueAnimator.ofInt(curTimeV.getMeasuredWidth(), (int) context.getResources().getDimension(R.dimen.alarm_time_w));
+            timeAniW.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int val = (int) valueAnimator.getAnimatedValue();
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) curTimeV.getLayoutParams();
+                    params.width = val;
+                    curTimeV.setLayoutParams(params);
+
+                }
+            });
+
+            ValueAnimator timeAniH = ValueAnimator.ofInt(curTimeV.getMeasuredHeight(), (int) context.getResources().getDimension(R.dimen.alarm_time_h));
+            timeAniH.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int val = (int) valueAnimator.getAnimatedValue();
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) curTimeV.getLayoutParams();
+                    params.height = val;
+                    curTimeV.setLayoutParams(params);
+
+                }
+            });
+
+            ValueAnimator timeAniLeft = ValueAnimator.ofInt(timeParams.leftMargin, (int) context.getResources().getDimension(R.dimen.alarm_time_left));
+            timeAniLeft.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int val = (int) valueAnimator.getAnimatedValue();
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) curTimeV.getLayoutParams();
+                    params.leftMargin = val;
+                    curTimeV.setLayoutParams(params);
+                }
+            });
+
+            ValueAnimator timeAniTop = ValueAnimator.ofInt(timeParams.topMargin, (int) context.getResources().getDimension(R.dimen.alarm_time_top) + topMargin);
+            timeAniTop.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int val = (int) valueAnimator.getAnimatedValue();
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) curTimeV.getLayoutParams();
+                    params.topMargin = val;
+                    curTimeV.setLayoutParams(params);
+                }
+            });
+
+            ValueAnimator timeAniText = ValueAnimator.ofInt((int) curTimeV.getTextSize(), (int) context.getResources().getDimension(R.dimen.alarm_time_text));
+            timeAniText.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int val = (int) valueAnimator.getAnimatedValue();
+                    curTimeV.setTextSize(TypedValue.COMPLEX_UNIT_PX, val);
+                }
+            });
+
+            AnimatorSet timeAni = new AnimatorSet();
+
+            timeAni.play(timeAniW).with(timeAniH).with(timeAniLeft).with(timeAniTop).with(timeAniText);
+            return timeAni;
+        }
+
+        /**
+         * helper method for generate colon animator
+         * @param topMargin
+         * @return
+         */
+        private AnimatorSet getColonAnim(int topMargin) {
+            RelativeLayout.LayoutParams colonParams = (RelativeLayout.LayoutParams) timeColon.getLayoutParams();
+
+            ValueAnimator colonLeft = ValueAnimator.ofInt(colonParams.leftMargin, (int) context.getResources().getDimension(R.dimen.alarm_colon_left));
+            colonLeft.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int val = (int) valueAnimator.getAnimatedValue();
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) timeColon.getLayoutParams();
+                    params.leftMargin = val;
+                    timeColon.setLayoutParams(params);
+                }
+            });
+
+            ValueAnimator colonTop = ValueAnimator.ofInt(colonParams.topMargin, (int) context.getResources().getDimension(R.dimen.alarm_colon_top) + topMargin);
+            colonTop.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int val = (int) valueAnimator.getAnimatedValue();
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) timeColon.getLayoutParams();
+                    params.topMargin = val;
+                    timeColon.setLayoutParams(params);
+                }
+            });
+
+            AnimatorSet colonAnim = new AnimatorSet();
+            colonAnim.play(colonTop).with(colonLeft);
+            return colonAnim;
+        }
+
+        /**
+         * helper method for generate the when textview animator
+         * @param topMargin
+         * @return
+         */
+        private AnimatorSet getWhenAnim(int topMargin) {
+            RelativeLayout.LayoutParams whenParams = (RelativeLayout.LayoutParams) whenOfD.getLayoutParams();
+
+            ValueAnimator whenTop = ValueAnimator.ofInt(whenParams.topMargin, (int) context.getResources().getDimension(R.dimen.alarm_when_top) + topMargin);
+            whenTop.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int val = (int) valueAnimator.getAnimatedValue();
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)whenOfD.getLayoutParams();
+                    params.topMargin = val;
+                    whenOfD.setLayoutParams(params);
+                }
+            });
+
+            ValueAnimator whenLeft = ValueAnimator.ofInt(whenParams.leftMargin, (int) context.getResources().getDimension(R.dimen.alarm_when_left));
+            whenLeft.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int val = (int) valueAnimator.getAnimatedValue();
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) whenOfD.getLayoutParams();
+                    params.leftMargin = val;
+                    whenOfD.setLayoutParams(params);
+                }
+            });
+
+            ValueAnimator whenText = ValueAnimator.ofInt((int)whenOfD.getTextSize(), (int) context.getResources().getDimension(R.dimen.alarm_when_text));
+            whenText.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int val = (int) valueAnimator.getAnimatedValue();
+                    whenOfD.setTextSize(TypedValue.COMPLEX_UNIT_PX, val);
+                }
+            });
+
+            AnimatorSet whenAnim = new AnimatorSet();
+            whenAnim.play(whenTop).with(whenLeft).with(whenText);
+            return whenAnim;
+        }
+
 
         void downSea(int duration) {
             ObjectAnimator sea = ObjectAnimator.ofFloat(scrollBackSea, "translationY", 0f, DensityUtil.dptopx(context, 170));
             sea.setDuration(duration);
             sea.start();
         }
+    }
+
+
+    public void dispose() {
+        mainActivity.removeView(landscape);
     }
 
 }

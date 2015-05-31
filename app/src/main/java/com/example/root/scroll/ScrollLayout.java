@@ -167,6 +167,10 @@ public class ScrollLayout {
         return result;
     }
 
+    public void dispose() {
+        parentLayout.removeView(scrollContainer);
+    }
+
 
 
 
