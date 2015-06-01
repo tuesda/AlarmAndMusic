@@ -1,4 +1,4 @@
-package com.example.root.otherComponent;
+package com.example.root.alarmModel;
 
 import com.example.root.scroll.TimeInDay;
 

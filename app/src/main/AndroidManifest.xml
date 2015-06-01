@@ -22,7 +22,10 @@
         </activity>
         <service android:name="com.example.root.musicNav.MusicService"></service>
         <activity android:name="com.example.root.blurringView.ActivityTest"></activity>
-        <activity android:name="com.example.root.viewSwitch.ActionBarTabsPager"></activity>
+
+        <provider
+            android:authorities="com.example.root.alarmModel.contentprovider"
+            android:name="com.example.root.alarmModel.AlarmsContentProvider"></provider>
     </application>
 
 </manifest>

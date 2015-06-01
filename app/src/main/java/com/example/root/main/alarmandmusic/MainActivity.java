@@ -17,6 +17,7 @@ import android.view.Window;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.example.root.alarmModel.AlarmSQLiteHelper;
 import com.example.root.blurringView.ActivityTest;
 import com.example.root.blurringView.PopWindow;
 import com.example.root.drawerNav.LeftDrawerLayout;
@@ -73,6 +74,11 @@ public class MainActivity extends Activity {
     }
 
     private void init() {
+        //debug zone start
+
+        //debug zone end
+
+
         final DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED); // lock DrawerLayout so it won't be able to open with gestures
 

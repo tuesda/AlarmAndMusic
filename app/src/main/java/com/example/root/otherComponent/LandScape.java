@@ -5,12 +5,14 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
+import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -31,6 +33,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.root.alarmModel.AlarmsContentProvider;
+import com.example.root.alarmModel.AlarmsTable;
 import com.example.root.main.alarmandmusic.MainActivity;
 import com.example.root.main.alarmandmusic.R;
 import com.example.root.scroll.ScrollLayout;
@@ -93,6 +97,10 @@ public class LandScape {
     private CheckBox checkSun;
 
     private boolean isBtnsShow = true;
+
+    private TimeInDay curTime;
+    private Uri alarmsUri;
+
 
 
 
@@ -167,6 +175,7 @@ public class LandScape {
         scrollLayout.setOnTimeChange(new ScrollLayout.OnTimeChange() {
             @Override
             public void elapse(TimeInDay time) {
+                curTime = time;
                 refreshBackground(time);
                 refreshCurTime(time);
                 whenOfD.setText(ViewColorGenerator.getWhenInDay(time));
@@ -206,9 +215,13 @@ public class LandScape {
         timeOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                    saveAlarm();
+
+
                 btnsTimePicker.setVisibility(View.INVISIBLE);
                 isBtnsShow = false;
 //                btnEdit.setOnClickListener(null);
+
                 LandscapeAnimator landscapeAnimator = new LandscapeAnimator();
                 landscapeAnimator.downBottom(500);
 
@@ -233,6 +246,22 @@ public class LandScape {
 
 
     }
+
+    /**
+     * save current state into database
+     */
+    private void saveAlarm() {
+        ContentValues inserts = new ContentValues();
+        inserts.put(AlarmsTable.COLUMN_TIME_HOUR, curTime.getHour());
+        inserts.put(AlarmsTable.COLUMN_TIME_MIN, curTime.getMin());
+        inserts.put(AlarmsTable.COLUMN_TITLE, "fuck");
+        if (alarmsUri == null) {
+            alarmsUri = context.getContentResolver().insert(AlarmsContentProvider.CONTENT_URI, inserts);
+        } else {
+            context.getContentResolver().update(alarmsUri,inserts, null, null);
+        }
+    }
+
 
 
     /**

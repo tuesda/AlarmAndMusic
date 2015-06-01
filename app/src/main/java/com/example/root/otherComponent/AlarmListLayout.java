@@ -1,15 +1,19 @@
 package com.example.root.otherComponent;
 
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
+import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import com.example.root.alarmModel.AlarmItem;
+import com.example.root.alarmModel.AlarmsContentProvider;
+import com.example.root.alarmModel.AlarmsTable;
 import com.example.root.main.alarmandmusic.R;
 import com.example.root.scroll.TimeInDay;
 
@@ -20,7 +24,7 @@ import java.util.Random;
 /**
  * Created by zhanglei on 15/5/31.
  */
-public class AlarmListLayout {
+public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
     private Context context;
     private RelativeLayout mainActivity;
     private LayoutInflater mInflater;
@@ -60,5 +64,25 @@ public class AlarmListLayout {
         }
 
         return alarms;
+    }
+
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        String[] projection = {AlarmsTable.COLUMN_ID, AlarmsTable.COLUMN_TIME_HOUR, AlarmsTable.COLUMN_TIME_MIN};
+        CursorLoader cursorLoader = new CursorLoader(context, AlarmsContentProvider.CONTENT_URI, projection, null, null, null);
+
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        // handle the returned cursor
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // handle the returned cursor as onLoadFinished
     }
 }
