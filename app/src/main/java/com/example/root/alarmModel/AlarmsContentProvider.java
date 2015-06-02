@@ -79,7 +79,7 @@ public class AlarmsContentProvider extends ContentProvider {
 
 
     private void checkColumns(String[] projections) {
-        String[] available = {AlarmsTable.COLUMN_TIME_HOUR, AlarmsTable.COLUMN_TIME_MIN, AlarmsTable.COLUMN_TITLE};
+        String[] available = {AlarmsTable.COLUMN_TIME_HOUR, AlarmsTable.COLUMN_TIME_MIN, AlarmsTable.COLUMN_TITLE, AlarmsTable.COLUMN_ID};
         if (projections!=null) {
             HashSet<String> requestedColumns = new HashSet<String>(Arrays.asList(projections));
             HashSet<String> availableColumns = new HashSet<String>(Arrays.asList(available));

@@ -146,7 +146,7 @@ public class MainActivity extends Activity {
         });
 
 
-//        alarmListLayout = new AlarmListLayout(mainActivity, this);
+        alarmListLayout = new AlarmListLayout(mainActivity, this);
 
 
 
