@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Bundle;
 import android.os.Message;
@@ -14,9 +15,12 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.example.root.alarmModel.AlarmItem;
 import com.example.root.alarmModel.AlarmSQLiteHelper;
 import com.example.root.blurringView.ActivityTest;
 import com.example.root.blurringView.PopWindow;
@@ -30,17 +34,17 @@ import com.example.root.musicNav.MusicService.*;
 import com.example.root.musicNav.*;
 
 
-import java.util.ArrayList;
-import java.util.logging.Handler;
 
 
 public class MainActivity extends Activity {
 
 
-    // scroll list items
-    private ArrayList<Item> itemsData;
-    // scroll layout
-     private ScrollLayout scrollLayout;
+    public static final int MESSAGE_INIT = 0;
+    public static final int MESSAGE_START_LANDSCAPE = 1;
+    public static final int MESSAGE_START_ALARM_LIST = 2;
+
+
+
 
     // music backend part
     private MusicUtils musicUtils;
@@ -65,6 +69,9 @@ public class MainActivity extends Activity {
 
     private AlarmListLayout alarmListLayout;
 
+    // handler for switch alarm detail and alarms list
+    private Handler alarmsHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,12 +89,12 @@ public class MainActivity extends Activity {
         final DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED); // lock DrawerLayout so it won't be able to open with gestures
 
-        RelativeLayout mainActivity = (RelativeLayout)findViewById(R.id.activity_main);
+        final RelativeLayout mainActivity = (RelativeLayout)findViewById(R.id.activity_main);
 
 
-        scrollLayout = new ScrollLayout(this, mainActivity);
 
-        landScape = new LandScape(this, mainActivity, scrollLayout);
+
+        //landScape = new LandScape(this, mainActivity, true, null);
 
         // music backend part of music nav
         musicUtils = new MusicUtils(this);
@@ -127,27 +134,74 @@ public class MainActivity extends Activity {
         musicNavLayout = new MusicNavLayout(this, mainActivity);
 
         popWindow = new PopWindow(mainActivity, this);
-        landScape.setEditOnClickL(new View.OnClickListener() {
+//        landScape.setEditOnClickL(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //landScape.setBtnEditVisible(View.INVISIBLE);
+//                // popWindow.addToMain();
+//                drawerLayout.openDrawer(leftDrawer);
+//
+//            }
+//        });
+//        popWindow.setBgOnTouchL(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                popWindow.removeBg();
+//                landScape.setBtnEditVisible(View.VISIBLE);
+//                return true;
+//            }
+//        });
+
+
+//        alarmListLayout = new AlarmListLayout(mainActivity, this);
+//        alarmListLayout.setOnItemClickListenter(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+//                AlarmItem alarmItem = alarmListLayout.getAlarm(position);
+//                landScape = new LandScape(MainActivity.this, mainActivity, false, alarmItem);
+//                alarmListLayout = null;
+//                landScape.setOnTimeIsOkListener(new LandScape.OnTimeIsOkListener() {
+//                    @Override
+//                    public void goToAlarmsList() {
+//                        alarmListLayout = new AlarmListLayout(mainActivity, MainActivity.this);
+//                        landScape = null;
+//                    }
+//                });
+//            }
+//        });
+
+        alarmsHandler = new Handler() {
             @Override
-            public void onClick(View v) {
-                //landScape.setBtnEditVisible(View.INVISIBLE);
-                // popWindow.addToMain();
-                drawerLayout.openDrawer(leftDrawer);
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case MESSAGE_INIT:
+                        alarmListLayout = new AlarmListLayout(mainActivity, MainActivity.this, alarmsHandler);
+                        break;
+                    case MESSAGE_START_LANDSCAPE:
+                        AlarmItem alarm = (AlarmItem)msg.obj;
+                        landScape = new LandScape(MainActivity.this, mainActivity, false, alarm, alarmsHandler);
+                        if (alarmListLayout!=null) {
+                            alarmListLayout.dispose();
+                            alarmListLayout = null;
+                        }
+                        break;
+                    case MESSAGE_START_ALARM_LIST:
+                        alarmListLayout = new AlarmListLayout(mainActivity, MainActivity.this, alarmsHandler);
+                        if (landScape!=null) {
+                            landScape.dispose();
+                            landScape = null;
+                        }
+                        break;
+                    default:
+                        Toast.makeText(MainActivity.this, "error message", Toast.LENGTH_LONG).show();
 
+                }
             }
-        });
-        popWindow.setBgOnTouchL(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                popWindow.removeBg();
-                landScape.setBtnEditVisible(View.VISIBLE);
-                return true;
-            }
-        });
+        };
 
 
-        alarmListLayout = new AlarmListLayout(mainActivity, this);
-
+        Message msg = Message.obtain(alarmsHandler, MESSAGE_INIT);
+        msg.sendToTarget();
 
 
     }
@@ -192,8 +246,7 @@ public class MainActivity extends Activity {
     }
 
     public void disposeViews() {
-        scrollLayout.dispose();
-        landScape.dispose();
+      //  landScape.dispose();
     }
 
 

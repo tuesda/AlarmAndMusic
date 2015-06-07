@@ -20,6 +20,10 @@ public class TimeInDay {
         return min;
     }
 
+    public int getListPosition() {
+        return hour * 60 + min;
+    }
+
     @Override
     public String toString() {
         String hourStr = hour < 10 ? "0" + hour : "" + hour;

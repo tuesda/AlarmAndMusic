@@ -171,6 +171,11 @@ public class ScrollLayout {
         parentLayout.removeView(scrollContainer);
     }
 
+    public void setItem(int itemNum) {
+        lv.setSelection(itemNum);
+    }
+
+
 
 
 

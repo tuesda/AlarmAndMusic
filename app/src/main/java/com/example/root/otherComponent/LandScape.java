@@ -33,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.root.alarmModel.AlarmItem;
 import com.example.root.alarmModel.AlarmsContentProvider;
 import com.example.root.alarmModel.AlarmsTable;
 import com.example.root.main.alarmandmusic.MainActivity;
@@ -45,12 +46,25 @@ import com.example.root.scroll.TimeInDay;
  */
 public class LandScape {
 
+    private static final int MONDAY = 1;
+    private static final int TUESDAY = 2;
+    private static final int WEDNESDAY = 4;
+    private static final int THURSDAY = 8;
+    private static final int FRIDAY = 16;
+    private static final int SATURDAY = 32;
+    private static final int SUNDAY = 64;
+    private static final int DAYS_MASK = 127;
+
+
+
+
     private Context context;
     private RelativeLayout mainActivity;
-    private ScrollLayout scrollLayout;
     private LayoutInflater mInflater;
 
     private RelativeLayout landscape;
+    // scroll layout
+    private ScrollLayout scrollLayout;
 
 
 
@@ -98,25 +112,43 @@ public class LandScape {
 
     private boolean isBtnsShow = true;
 
-    private TimeInDay curTime;
-    private Uri alarmsUri;
+    private TimeInDay curTime = new TimeInDay(0,0);
+
+
+    // flag indicate if the alarm detail view is first
+    private final boolean mIsInitial;
+
+    // current alarm object indicating time from alarm list
+    private  AlarmItem initAlarm;
+
+
+    // alarms handler
+    private Handler alarmsHandler;
 
 
 
 
-
-
-    public LandScape(Context context, RelativeLayout mainActivity, ScrollLayout scrollLayout) {
+    public LandScape(Context context, RelativeLayout mainActivity, boolean isFirst, AlarmItem alarm, Handler alarmsHandler) {
         this.context = context;
         this.mainActivity = mainActivity;
-        this.scrollLayout = scrollLayout;
+        this.mIsInitial = isFirst;
+        this.alarmsHandler = alarmsHandler;
+        if (!mIsInitial) {
+            initAlarm = alarm;
+        } else {
+
+        }
         mInflater = LayoutInflater.from(context);
         init();
     }
 
     private void init() {
 
+        scrollLayout = new ScrollLayout(context, mainActivity);
+        if (!mIsInitial) {
+            scrollLayout.setItem(initAlarm.getTimeInDay().getListPosition() + 1);
 
+        }
 
 
         landscape = (RelativeLayout)mInflater.inflate(R.layout.landscape, null);
@@ -170,6 +202,17 @@ public class LandScape {
         checkFri = (CheckBox)landscape.findViewById(R.id.check_fri);
         checkSat = (CheckBox)landscape.findViewById(R.id.check_sat);
         checkSun = (CheckBox)landscape.findViewById(R.id.check_sun);
+        if (!mIsInitial) {
+            int weeks = initAlarm.getWeeks();
+            if ((MONDAY & weeks) == MONDAY) { checkMon.setChecked(true);}
+            if ((TUESDAY & weeks) == TUESDAY) { checkTus.setChecked(true);}
+            if ((WEDNESDAY & weeks) == WEDNESDAY) { checkWed.setChecked(true);}
+            if ((THURSDAY & weeks) == THURSDAY) { checkThur.setChecked(true);}
+            if ((FRIDAY & weeks) == FRIDAY) { checkFri.setChecked(true);}
+            if ((SATURDAY & weeks) == SATURDAY) { checkSat.setChecked(true);}
+            if ((SUNDAY & weeks) == SUNDAY) { checkSun.setChecked(true);}
+
+        }
 
 
         scrollLayout.setOnTimeChange(new ScrollLayout.OnTimeChange() {
@@ -215,7 +258,7 @@ public class LandScape {
         timeOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    saveAlarm();
+                saveAlarm();
 
 
                 btnsTimePicker.setVisibility(View.INVISIBLE);
@@ -238,11 +281,28 @@ public class LandScape {
 
 
 
+
+
+
         RelativeLayout.LayoutParams landParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mainActivity.addView(landscape, landParams);
 
 
+        landscape.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!mIsInitial) {
+                    AlarmDetailExpand expand = new AlarmDetailExpand(context, landscape);
+                    expand.upBottom(500);
+                    int[] phonesizes = getPhoneSize();
+                    int btmMargin = phonesizes[1] - DensityUtil.dptopx(context, 100 + 40);
+                    int topMargin = DensityUtil.dptopx(context, 40);
 
+
+                    expand.downTop(500, btmMargin, topMargin);
+                }
+            }
+        });
 
 
     }
@@ -251,16 +311,74 @@ public class LandScape {
      * save current state into database
      */
     private void saveAlarm() {
-        ContentValues inserts = new ContentValues();
-        inserts.put(AlarmsTable.COLUMN_TIME_HOUR, curTime.getHour());
-        inserts.put(AlarmsTable.COLUMN_TIME_MIN, curTime.getMin());
-        inserts.put(AlarmsTable.COLUMN_TITLE, "fuck");
-        if (alarmsUri == null) {
-            alarmsUri = context.getContentResolver().insert(AlarmsContentProvider.CONTENT_URI, inserts);
+
+        // get weeks
+        int weeks = 0;
+        if (checkMon.isChecked()) { weeks |= MONDAY; }
+        if (checkTus.isChecked()) { weeks |= TUESDAY; }
+        if (checkWed.isChecked()) { weeks |= WEDNESDAY; }
+        if (checkThur.isChecked()) { weeks |= THURSDAY; }
+        if (checkFri.isChecked()) { weeks |= FRIDAY; }
+        if (checkSat.isChecked()) { weeks |= SATURDAY; }
+        if (checkSun.isChecked()) { weeks |= SUNDAY; }
+
+//        Toast.makeText(context, "weeks: " + weeks, Toast.LENGTH_LONG).show();
+
+        // get alarmtime
+        int alarmTime = 5;
+
+        // get enable
+        int enable = 1;
+
+        // get alertType
+        int alertType = 0;
+
+        // get title
+        String title = "Get up!";
+
+        // get snooze
+        int snooze = 0;
+
+        // get alert
+        String alert = "default";
+
+        // get ringName
+        String ringName = "ring";
+
+        // get volume
+        int volume = 5;
+
+        // get vibrate
+        int vibrate = 0;
+
+        // get backGround
+        String backGround = "default";
+
+        ContentValues values = new ContentValues();
+        values.put(AlarmsTable.COLUMN_TIME_HOUR, curTime.getHour());
+        values.put(AlarmsTable.COLUMN_TIME_MIN, curTime.getMin());
+        values.put(AlarmsTable.COLUMN_DAYS_OF_WEEK, weeks);
+        values.put(AlarmsTable.COLUMN_ALARM_TIME, alarmTime);
+        values.put(AlarmsTable.COLUMN_ENABLE, enable);
+        values.put(AlarmsTable.COLUMN_ALERT_TYPE, alertType);
+        values.put(AlarmsTable.COLUMN_TITLE, title);
+        values.put(AlarmsTable.COLUMN_SNOOZE, snooze);
+        values.put(AlarmsTable.COLUMN_ALERT, alert);
+        values.put(AlarmsTable.COLUMN_RING_NAME, ringName);
+        values.put(AlarmsTable.COLUMN_VOLUME, volume);
+        values.put(AlarmsTable.COLUMN_VIBRATE, vibrate);
+        values.put(AlarmsTable.COLUMN_BACK_GROUND, backGround);
+
+        if (mIsInitial) {
+            context.getContentResolver().insert(AlarmsContentProvider.CONTENT_URI, values);
         } else {
-            context.getContentResolver().update(alarmsUri,inserts, null, null);
+            Uri alarmsUri = Uri.withAppendedPath(AlarmsContentProvider.CONTENT_URI, "/" + initAlarm.getId());
+            context.getContentResolver().update(alarmsUri, values, null, null);
         }
     }
+
+
+
 
 
 
@@ -524,8 +642,8 @@ public class LandScape {
 
                 @Override
                 public void onAnimationEnd(Animator animator) {
-                    ((MainActivity)context).disposeViews();
-                    AlarmListLayout alarmListLayout = new AlarmListLayout(mainActivity, context);
+                    Message msg = Message.obtain(alarmsHandler, MainActivity.MESSAGE_START_ALARM_LIST);
+                    msg.sendToTarget();
 
                 }
 
@@ -739,6 +857,9 @@ public class LandScape {
 
     public void dispose() {
         mainActivity.removeView(landscape);
+        scrollLayout.dispose();
     }
+
+
 
 }

@@ -32,6 +32,7 @@
         android:layout_width="@dimen/when_of_day_w"
         android:layout_height="@dimen/when_of_day_h" />
     <CheckBox
+        android:focusable="false"
         android:layout_alignParentRight="true"
         android:layout_marginRight="60dp"
         android:layout_centerVertical="true"

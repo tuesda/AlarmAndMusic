@@ -13,7 +13,17 @@ public class AlarmsTable {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TIME_HOUR = "hour";
     public static final String COLUMN_TIME_MIN = "min";
+    public static final String COLUMN_DAYS_OF_WEEK = "daysofweek";
+    public static final String COLUMN_ALARM_TIME = "alarmtime";
+    public static final String COLUMN_ENABLE = "enable";
+    public static final String COLUMN_ALERT_TYPE = "alerttype";
     public static final String COLUMN_TITLE = "title";
+    public static final String COLUMN_SNOOZE = "snooze";
+    public static final String COLUMN_ALERT = "alert";
+    public static final String COLUMN_RING_NAME = "ringname";
+    public static final String COLUMN_VOLUME = "volume";
+    public static final String COLUMN_VIBRATE = "vibrate";
+    public static final String COLUMN_BACK_GROUND = "background";
 
 
     // Database creation SQL statement
@@ -22,7 +32,17 @@ public class AlarmsTable {
             + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_TIME_HOUR + " integer not null, "
             + COLUMN_TIME_MIN + " integer not null, "
-            + COLUMN_TITLE + " text not null"
+            + COLUMN_DAYS_OF_WEEK + " integer not null, "
+            + COLUMN_ALARM_TIME + " integer not null, "
+            + COLUMN_ENABLE + " integer not null, "
+            + COLUMN_ALERT_TYPE + " integer not null, "
+            + COLUMN_TITLE + " text not null, "
+            + COLUMN_SNOOZE + " integer not null, "
+            + COLUMN_ALERT + " text not null, "
+            + COLUMN_RING_NAME + " text not null, "
+            + COLUMN_VOLUME + " integer not null, "
+            + COLUMN_VIBRATE + " integer not null, "
+            + COLUMN_BACK_GROUND + " text"
             + ");";
 
     public static void onCreate(SQLiteDatabase database) {
@@ -37,5 +57,9 @@ public class AlarmsTable {
         onCreate(database);
     }
 
+
+    public static void main(String[] args) {
+        System.out.println(DATABASE_CREATE);
+    }
 
 }
