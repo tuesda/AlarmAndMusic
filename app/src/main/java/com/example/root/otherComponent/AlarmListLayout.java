@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -27,6 +28,8 @@ import com.example.root.main.alarmandmusic.R;
 import com.example.root.scroll.TimeInDay;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -40,6 +43,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private List<AlarmItem> alarms;
     private RelativeLayout alarmListLayout;
+    private Button btn_add;
     private ListView alarmListV;
     AlarmListAdapter alarmsAdapter;
 
@@ -71,6 +75,15 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
         if (((MainActivity)context).getLoaderManager().getLoader(0).isStarted()) {
             alarmListV.setVisibility(View.VISIBLE);
         }
+
+        btn_add = (Button)alarmListLayout.findViewById(R.id.add_alarm);
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Message msg = Message.obtain(alarmsHandler, MainActivity.MESSAGE_INIT_LANDSCAPE);
+                msg.sendToTarget();
+            }
+        });
 
 
     }
@@ -122,6 +135,18 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
             alarmsCursor.moveToNext();
         }
         alarms = alarmsData;
+        Collections.sort(alarms, new Comparator<AlarmItem>() {
+            @Override
+            public int compare(AlarmItem alarmItem, AlarmItem otherAlarmItem) {
+                int hour = alarmItem.getTimeInDay().getHour();
+                int min = alarmItem.getTimeInDay().getMin();
+
+                int otherHour = otherAlarmItem.getTimeInDay().getHour();
+                int otherMin = otherAlarmItem.getTimeInDay().getMin();
+
+                return hour == otherHour ? (min - otherMin) : (hour - otherHour);
+            }
+        });
         alarmsAdapter = new AlarmListAdapter(alarmsData, context);
         alarmListV.setAdapter(alarmsAdapter);
         alarmListV.setOnItemClickListener(new AdapterView.OnItemClickListener() {

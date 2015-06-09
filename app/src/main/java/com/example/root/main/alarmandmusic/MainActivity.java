@@ -39,9 +39,10 @@ import com.example.root.musicNav.*;
 public class MainActivity extends Activity {
 
 
-    public static final int MESSAGE_INIT = 0;
+    public static final int MESSAGE_INIT_ALARM_LIST = 0;
     public static final int MESSAGE_START_LANDSCAPE = 1;
     public static final int MESSAGE_START_ALARM_LIST = 2;
+    public static final int MESSAGE_INIT_LANDSCAPE = 4;
 
 
 
@@ -174,8 +175,11 @@ public class MainActivity extends Activity {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
-                    case MESSAGE_INIT:
+                    case MESSAGE_INIT_ALARM_LIST:
                         alarmListLayout = new AlarmListLayout(mainActivity, MainActivity.this, alarmsHandler);
+                        break;
+                    case MESSAGE_INIT_LANDSCAPE:
+                        landScape = new LandScape(MainActivity.this, mainActivity, true, null, alarmsHandler);
                         break;
                     case MESSAGE_START_LANDSCAPE:
                         AlarmItem alarm = (AlarmItem)msg.obj;
@@ -200,7 +204,7 @@ public class MainActivity extends Activity {
         };
 
 
-        Message msg = Message.obtain(alarmsHandler, MESSAGE_INIT);
+        Message msg = Message.obtain(alarmsHandler, MESSAGE_INIT_ALARM_LIST);
         msg.sendToTarget();
 
 
