@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -30,6 +31,7 @@ import com.example.root.scroll.TimeInDay;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -48,6 +50,9 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
     AlarmListAdapter alarmsAdapter;
 
     private Handler alarmsHandler;
+
+
+    private HashMap<RelativeLayout, Button> deleteBtnCache;
 
 
 
@@ -75,6 +80,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
         if (((MainActivity)context).getLoaderManager().getLoader(0).isStarted()) {
             alarmListV.setVisibility(View.VISIBLE);
         }
+        deleteBtnCache = new HashMap<RelativeLayout, Button>();
 
         btn_add = (Button)alarmListLayout.findViewById(R.id.add_alarm);
         btn_add.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +100,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
     private void fillWithDB() {
-        List<AlarmItem> alarmsData = new ArrayList<AlarmItem>();
+        final List<AlarmItem> alarmsData = new ArrayList<AlarmItem>();
         alarmsCursor.moveToFirst();
         while (alarmsCursor.isAfterLast() == false) {
             int id = alarmsCursor.getInt(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_ID));
@@ -159,10 +165,38 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
         });
 
 
+
+        alarmListV.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                final Button deleteBtn = new Button(context);
+                deleteBtn.setText("Delete");
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                params.addRule(RelativeLayout.CENTER_IN_PARENT);
+                final int alarmId = ((AlarmListAdapter.AlarmViewHolder) view.getTag()).id;
+                deleteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(context, "delete button clicked id: " + alarmId, Toast.LENGTH_SHORT).show();
+                        context.getContentResolver().delete(AlarmsContentProvider.CONTENT_URI, "_id=?", new String[] {String.valueOf(alarmId)});
+                    }
+                });
+                deleteBtnCache.put((RelativeLayout) view, deleteBtn);
+                ((RelativeLayout) view).addView(deleteBtn, params);
+
+                return true;
+            }
+        });
+
+
         alarmListV.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                if (!deleteBtnCache.isEmpty()) {
+                    for (HashMap.Entry<RelativeLayout, Button> entry : deleteBtnCache.entrySet()) {
+                        entry.getKey().removeView(entry.getValue());
+                    }
+                }
             }
 
             @Override

@@ -1,6 +1,7 @@
 package com.example.root.otherComponent;
 
 import android.annotation.TargetApi;
+import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
@@ -10,11 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.root.alarmModel.AlarmItem;
+import com.example.root.alarmModel.AlarmsContentProvider;
+import com.example.root.alarmModel.AlarmsTable;
 import com.example.root.main.alarmandmusic.R;
 
 import java.util.List;
@@ -54,7 +58,7 @@ public class AlarmListAdapter extends BaseAdapter {
     @Override
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public View getView(int i, View view, ViewGroup viewGroup) {
-        AlarmViewHolder holder;
+        final AlarmViewHolder holder;
         if (view == null) {
             view = mInflater.inflate(R.layout.alarm_item, viewGroup, false);
             holder = new AlarmViewHolder();
@@ -70,6 +74,16 @@ public class AlarmListAdapter extends BaseAdapter {
         holder.when.setTypeface(tf);
         holder.time.setText(alarms.get(i).getTimeInDay().toString());
         holder.when.setText(ViewColorGenerator.getWhenInDay(alarms.get(i).getTimeInDay()));
+        holder.id = alarms.get(i).getId();
+        holder.enable.setChecked(alarms.get(i).getEnable() == 1 ? true : false);
+        holder.enable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                ContentValues enableUpdate = new ContentValues();
+                enableUpdate.put(AlarmsTable.COLUMN_ENABLE, isChecked ? 1 : 0);
+                context.getContentResolver().update(AlarmsContentProvider.CONTENT_URI, enableUpdate, "_id=?", new String[] {String.valueOf(holder.id)});
+            }
+        });
         GradientDrawable bg = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, alarms.get(i).getBgColors());
         view.setBackground(bg);
 
@@ -82,6 +96,7 @@ public class AlarmListAdapter extends BaseAdapter {
         TextView when;
         ImageView colon;
         CheckBox enable;
+        int id;
 
     }
 }
