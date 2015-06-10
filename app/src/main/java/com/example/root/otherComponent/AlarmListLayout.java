@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -46,6 +47,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
     private List<AlarmItem> alarms;
     private RelativeLayout alarmListLayout;
     private Button btn_add;
+    private ImageView btnEdit;
     private ListView alarmListV;
     AlarmListAdapter alarmsAdapter;
 
@@ -74,6 +76,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
     private void init() {
         alarmListLayout = (RelativeLayout) mInflater.inflate(R.layout.alarm_list_layout, null);
         alarmListV = (ListView) alarmListLayout.findViewById(R.id.alarm_list);
+        btnEdit = (ImageView)alarmListLayout.findViewById(R.id.btn_edit);
         ((MainActivity)context).getLoaderManager().initLoader(0, null, this);
 
         alarmListV.setDivider(null);
@@ -183,6 +186,8 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
                 AlarmItem alarm = alarms.get(position);
                 Message msg = Message.obtain(alarmsHandler, MainActivity.MESSAGE_START_LANDSCAPE, alarm);
                 msg.sendToTarget();
+//                Log.d("animation", "click time  " + System.currentTimeMillis());
+
             }
         });
 
@@ -199,8 +204,8 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
                 deleteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(context, "delete button clicked id: " + alarmId, Toast.LENGTH_SHORT).show();
-                        context.getContentResolver().delete(AlarmsContentProvider.CONTENT_URI, "_id=?", new String[] {String.valueOf(alarmId)});
+//                        Toast.makeText(context, "delete button clicked id: " + alarmId, Toast.LENGTH_SHORT).show();
+                        context.getContentResolver().delete(AlarmsContentProvider.CONTENT_URI, "_id=?", new String[]{String.valueOf(alarmId)});
                     }
                 });
                 deleteBtnCache.put((RelativeLayout) view, deleteBtn);
@@ -217,6 +222,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
                 if (!deleteBtnCache.isEmpty()) {
                     for (HashMap.Entry<RelativeLayout, Button> entry : deleteBtnCache.entrySet()) {
                         entry.getKey().removeView(entry.getValue());
+                        deleteBtnCache.remove(entry.getKey());
                     }
                 }
             }
@@ -276,6 +282,12 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
         CursorLoader cursorLoader = new CursorLoader(context, AlarmsContentProvider.CONTENT_URI, projection, null, null, null);
 
         return cursorLoader;
+    }
+
+
+    // set the btnEdit onclick listener
+    public void setEditOnClickL(View.OnClickListener listener) {
+        btnEdit.setOnClickListener(listener);
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -177,13 +178,32 @@ public class MainActivity extends Activity {
                 switch (msg.what) {
                     case MESSAGE_INIT_ALARM_LIST:
                         alarmListLayout = new AlarmListLayout(mainActivity, MainActivity.this, alarmsHandler);
+                        alarmListLayout.setEditOnClickL(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                drawerLayout.openDrawer(leftDrawer);
+                            }
+                        });
                         break;
                     case MESSAGE_INIT_LANDSCAPE:
                         landScape = new LandScape(MainActivity.this, mainActivity, true, null, alarmsHandler);
+                        landScape.setEditOnClickL(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                drawerLayout.openDrawer(leftDrawer);
+                            }
+                        });
                         break;
                     case MESSAGE_START_LANDSCAPE:
+//                        Log.d("animation", "handled time" + System.currentTimeMillis());
                         AlarmItem alarm = (AlarmItem)msg.obj;
                         landScape = new LandScape(MainActivity.this, mainActivity, false, alarm, alarmsHandler);
+                        landScape.setEditOnClickL(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                drawerLayout.openDrawer(leftDrawer);
+                            }
+                        });
                         if (alarmListLayout!=null) {
                             alarmListLayout.dispose();
                             alarmListLayout = null;
@@ -191,6 +211,12 @@ public class MainActivity extends Activity {
                         break;
                     case MESSAGE_START_ALARM_LIST:
                         alarmListLayout = new AlarmListLayout(mainActivity, MainActivity.this, alarmsHandler);
+                        alarmListLayout.setEditOnClickL(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                drawerLayout.openDrawer(leftDrawer);
+                            }
+                        });
                         if (landScape!=null) {
                             landScape.dispose();
                             landScape = null;

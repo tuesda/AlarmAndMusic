@@ -3,9 +3,17 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="#f0606060"
     >
+    <ImageView
+        android:layout_marginTop="@dimen/btn_edit_top"
+        android:layout_marginLeft="@dimen/btn_edit_left"
+        android:id="@+id/btn_edit"
+        android:src="@drawable/btn_edit"
+        android:layout_width="@dimen/btn_edit_w"
+        android:layout_height="@dimen/btn_edit_h" />
     <Button
         android:id="@+id/add_alarm"
         android:text="add"
+        android:layout_alignParentRight="true"
         android:background="#ffff0000"
         android:width="40dp"
         android:height="20dp"
