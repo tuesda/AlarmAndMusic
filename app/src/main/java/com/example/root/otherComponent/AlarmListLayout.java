@@ -55,6 +55,10 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
     private HashMap<RelativeLayout, Button> deleteBtnCache;
 
 
+    // indicating first time load data from database
+    private boolean isFirstLoad = true;
+
+
 
 
     private Cursor alarmsCursor;
@@ -140,7 +144,12 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
             }
             alarmsCursor.moveToNext();
         }
-        alarms = alarmsData;
+        if (alarms == null) {
+            alarms = alarmsData;
+        } else {
+            alarms.clear();
+            alarms.addAll(alarmsData);
+        }
         Collections.sort(alarms, new Comparator<AlarmItem>() {
             @Override
             public int compare(AlarmItem alarmItem, AlarmItem otherAlarmItem) {
@@ -153,7 +162,20 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
                 return hour == otherHour ? (min - otherMin) : (hour - otherHour);
             }
         });
-        alarmsAdapter = new AlarmListAdapter(alarmsData, context);
+        if (isFirstLoad) {
+            initAlarmsListV();
+            isFirstLoad = false;
+        } else {
+            alarmsAdapter.notifyDataSetChanged();
+        }
+
+        alarmListV.setVisibility(View.VISIBLE);
+    }
+
+
+
+    private void initAlarmsListV() {
+        alarmsAdapter = new AlarmListAdapter(alarms, context);
         alarmListV.setAdapter(alarmsAdapter);
         alarmListV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -217,7 +239,6 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
                 alarmListLayout.setBackgroundColor(current);
             }
         });
-        alarmListV.setVisibility(View.VISIBLE);
     }
 
 
