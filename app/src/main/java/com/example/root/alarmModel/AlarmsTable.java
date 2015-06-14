@@ -25,6 +25,14 @@ public class AlarmsTable {
     public static final String COLUMN_VIBRATE = "vibrate";
     public static final String COLUMN_BACK_GROUND = "background";
 
+    public static final String[] ALARM_QUERY_COLUMNS = {
+            COLUMN_ID, COLUMN_TIME_HOUR, COLUMN_TIME_MIN, COLUMN_DAYS_OF_WEEK, COLUMN_ALARM_TIME,
+            COLUMN_ENABLE, COLUMN_ALERT_TYPE, COLUMN_TITLE, COLUMN_SNOOZE, COLUMN_ALERT,
+            COLUMN_RING_NAME, COLUMN_VOLUME, COLUMN_VIBRATE, COLUMN_BACK_GROUND
+    };
+
+    public static final String WHERE_ENABLE = COLUMN_ENABLE + "=1";
+
 
     // Database creation SQL statement
     private static final String DATABASE_CREATE = "create table "

@@ -1,8 +1,11 @@
 package com.example.root.otherComponent;
 
+import android.app.AlarmManager;
 import android.app.LoaderManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -23,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.root.alarmModel.AlarmItem;
+import com.example.root.alarmModel.Alarms;
 import com.example.root.alarmModel.AlarmsContentProvider;
 import com.example.root.alarmModel.AlarmsTable;
 import com.example.root.main.alarmandmusic.MainActivity;
@@ -110,41 +114,8 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
         final List<AlarmItem> alarmsData = new ArrayList<AlarmItem>();
         alarmsCursor.moveToFirst();
         while (alarmsCursor.isAfterLast() == false) {
-            int id = alarmsCursor.getInt(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_ID));
-            int hour = alarmsCursor.getInt(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_TIME_HOUR));
-            int min = alarmsCursor.getInt(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_TIME_MIN));
-            int weeks = alarmsCursor.getInt(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_DAYS_OF_WEEK));
-            int alertTime = alarmsCursor.getInt(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_ALARM_TIME));
-            int enable = alarmsCursor.getInt(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_ENABLE));
-            int alertType = alarmsCursor.getInt(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_ALERT_TYPE));
-            String title = alarmsCursor.getString(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_TITLE));
-            int snooze = alarmsCursor.getInt(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_SNOOZE));
-            String alert = alarmsCursor.getString(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_ALERT));
-            String ringName = alarmsCursor.getString(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_RING_NAME));
-            int volume = alarmsCursor.getInt(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_VOLUME));
-            int vibrate = alarmsCursor.getInt(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_VIBRATE));
-            String backGround = alarmsCursor.getString(alarmsCursor.getColumnIndex(AlarmsTable.COLUMN_BACK_GROUND));
-            if (hour>=0 && hour<24 && min>=0 && min<60) {
-                TimeInDay time = new TimeInDay(hour, min);
-                AlarmItem alarmItem = new AlarmItem(
-                        id,
-                        time,
-                        weeks,
-                        alertTime,
-                        enable,
-                        alertType,
-                        title,
-                        snooze,
-                        alert,
-                        ringName,
-                        volume,
-                        vibrate,
-                        backGround
-                        );
-                alarmsData.add(alarmItem);
-            } else {
-                Log.i(AlarmListLayout.class.getName(), "Hour or Min from database is invalid hour=" + hour + " min=" + min);
-            }
+            AlarmItem alarmItem = Alarms.getAlarmFromCursor(alarmsCursor);
+            alarmsData.add(alarmItem);
             alarmsCursor.moveToNext();
         }
         if (alarms == null) {
@@ -177,6 +148,10 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
 
+
+
+
+
     private void initAlarmsListV() {
         alarmsAdapter = new AlarmListAdapter(alarms, context);
         alarmListV.setAdapter(alarmsAdapter);
@@ -196,6 +171,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
         alarmListV.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                final View tmpView = view;
                 final Button deleteBtn = new Button(context);
                 deleteBtn.setText("Delete");
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -203,9 +179,10 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
                 final int alarmId = ((AlarmListAdapter.AlarmViewHolder) view.getTag()).id;
                 deleteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
+                    public void onClick(View btnView) {
 //                        Toast.makeText(context, "delete button clicked id: " + alarmId, Toast.LENGTH_SHORT).show();
                         context.getContentResolver().delete(AlarmsContentProvider.CONTENT_URI, "_id=?", new String[]{String.valueOf(alarmId)});
+                        ((RelativeLayout) tmpView).removeView(deleteBtn);
                     }
                 });
                 deleteBtnCache.put((RelativeLayout) view, deleteBtn);
@@ -229,20 +206,22 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
 
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                int[] colors = ViewColorGenerator.getTopBtmColor(alarms.get(firstVisibleItem).getTimeInDay());
+                if (alarms.size() > 0) {
+                    int[] colors = ViewColorGenerator.getTopBtmColor(alarms.get(firstVisibleItem).getTimeInDay());
 //                Toast.makeText(context, "red " + Color.red(colors[0]), Toast.LENGTH_LONG).show();
-                int start_a = Color.alpha(colors[0]);
-                int start_r = Color.red(colors[0]);
-                int start_g = Color.green(colors[0]);
-                int start_b = Color.blue(colors[0]);
+                    int start_a = Color.alpha(colors[0]);
+                    int start_r = Color.red(colors[0]);
+                    int start_g = Color.green(colors[0]);
+                    int start_b = Color.blue(colors[0]);
 
-                int end_a = Color.alpha(colors[1]);
-                int end_r = Color.red(colors[1]);
-                int end_g = Color.green(colors[1]);
-                int end_b = Color.blue(colors[1]);
+                    int end_a = Color.alpha(colors[1]);
+                    int end_r = Color.red(colors[1]);
+                    int end_g = Color.green(colors[1]);
+                    int end_b = Color.blue(colors[1]);
 
-                int current = Color.argb((start_a + end_a) / 2, (start_r + end_r) / 2, (start_g + end_g) / 2, (start_b + end_b) / 2);
-                alarmListLayout.setBackgroundColor(current);
+                    int current = Color.argb((start_a + end_a) / 2, (start_r + end_r) / 2, (start_g + end_g) / 2, (start_b + end_b) / 2);
+                    alarmListLayout.setBackgroundColor(current);
+                }
             }
         });
     }

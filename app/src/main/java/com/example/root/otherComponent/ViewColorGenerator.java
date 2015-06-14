@@ -513,4 +513,20 @@ public class ViewColorGenerator {
 
         return new int[]{top, btm};
     }
+
+    public static int getMiddleColor(TimeInDay timeInDay) {
+        int[] colors = getTopBtmColor(timeInDay);
+        int start_a = Color.alpha(colors[0]);
+        int start_r = Color.red(colors[0]);
+        int start_g = Color.green(colors[0]);
+        int start_b = Color.blue(colors[0]);
+
+        int end_a = Color.alpha(colors[1]);
+        int end_r = Color.red(colors[1]);
+        int end_g = Color.green(colors[1]);
+        int end_b = Color.blue(colors[1]);
+
+        int current = Color.argb((start_a + end_a) / 2, (start_r + end_r) / 2, (start_g + end_g) / 2, (start_b + end_b) / 2);
+        return current;
+    }
 }

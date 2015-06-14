@@ -34,12 +34,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.root.alarmModel.AlarmItem;
+import com.example.root.alarmModel.Alarms;
 import com.example.root.alarmModel.AlarmsContentProvider;
 import com.example.root.alarmModel.AlarmsTable;
 import com.example.root.main.alarmandmusic.MainActivity;
 import com.example.root.main.alarmandmusic.R;
 import com.example.root.scroll.ScrollLayout;
 import com.example.root.scroll.TimeInDay;
+
+import java.util.Calendar;
 
 /**
  * Created by zhanglei on 15/5/12.
@@ -136,7 +139,12 @@ public class LandScape {
         if (!mIsInitial) {
             initAlarm = alarm;
         } else {
-
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(System.currentTimeMillis());
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int min = c.get(Calendar.MINUTE);
+            AlarmItem tmpAlarm = new AlarmItem(0, new TimeInDay(hour, min), 0, 0, 0, 0, "", 0, "", "", 0, 0,  "");
+            initAlarm = tmpAlarm;
         }
         mInflater = LayoutInflater.from(context);
         init();
@@ -145,10 +153,10 @@ public class LandScape {
     private void init() {
 
         scrollLayout = new ScrollLayout(context, mainActivity);
-        if (!mIsInitial) {
+        //if (!mIsInitial) {
             scrollLayout.setItem(initAlarm.getTimeInDay().getListPosition() + 1);
 
-        }
+        //}
 
 
         landscape = (RelativeLayout)mInflater.inflate(R.layout.landscape, null);
@@ -375,6 +383,7 @@ public class LandScape {
             Uri alarmsUri = Uri.withAppendedPath(AlarmsContentProvider.CONTENT_URI, "/" + initAlarm.getId());
             context.getContentResolver().update(alarmsUri, values, null, null);
         }
+        Alarms.setNextAlert(context);
     }
 
 
@@ -547,6 +556,10 @@ public class LandScape {
 
     public void setBtnEditVisible(int visible) {
         btnEdit.setVisibility(visible);
+    }
+
+    public TimeInDay getCurTime() {
+        return curTime;
     }
 
 

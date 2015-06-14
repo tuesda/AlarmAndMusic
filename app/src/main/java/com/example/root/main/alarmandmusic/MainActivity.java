@@ -29,6 +29,7 @@ import com.example.root.drawerNav.LeftDrawerLayout;
 import com.example.root.musicNav.MusicService;
 import com.example.root.otherComponent.AlarmListLayout;
 import com.example.root.otherComponent.LandScape;
+import com.example.root.otherComponent.ViewColorGenerator;
 import com.example.root.scroll.*;
 
 import com.example.root.musicNav.MusicService.*;
@@ -190,6 +191,7 @@ public class MainActivity extends Activity {
                         landScape.setEditOnClickL(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                leftDrawer.setBackgroundColor(ViewColorGenerator.getMiddleColor(landScape.getCurTime()));
                                 drawerLayout.openDrawer(leftDrawer);
                             }
                         });
@@ -201,6 +203,7 @@ public class MainActivity extends Activity {
                         landScape.setEditOnClickL(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                leftDrawer.setBackgroundColor(ViewColorGenerator.getMiddleColor(landScape.getCurTime()));
                                 drawerLayout.openDrawer(leftDrawer);
                             }
                         });

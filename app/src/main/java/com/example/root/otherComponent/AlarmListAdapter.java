@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.root.alarmModel.AlarmItem;
+import com.example.root.alarmModel.Alarms;
 import com.example.root.alarmModel.AlarmsContentProvider;
 import com.example.root.alarmModel.AlarmsTable;
 import com.example.root.main.alarmandmusic.R;
@@ -81,7 +82,8 @@ public class AlarmListAdapter extends BaseAdapter {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 ContentValues enableUpdate = new ContentValues();
                 enableUpdate.put(AlarmsTable.COLUMN_ENABLE, isChecked ? 1 : 0);
-                context.getContentResolver().update(AlarmsContentProvider.CONTENT_URI, enableUpdate, "_id=?", new String[] {String.valueOf(holder.id)});
+                context.getContentResolver().update(AlarmsContentProvider.CONTENT_URI, enableUpdate, "_id=?", new String[]{String.valueOf(holder.id)});
+                Alarms.setNextAlert(context);
             }
         });
         GradientDrawable bg = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, alarms.get(i).getBgColors());

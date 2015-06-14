@@ -20,12 +20,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.example.root.alarms.AlertActivity">
+
+        </activity>
         <service android:name="com.example.root.musicNav.MusicService"></service>
         <activity android:name="com.example.root.blurringView.ActivityTest"></activity>
 
         <provider
             android:authorities="com.example.root.alarmModel.contentprovider"
             android:name="com.example.root.alarmModel.AlarmsContentProvider"></provider>
+        <receiver android:name="com.example.root.alarmModel.AlarmInitReceiver">
+            <intent-filter>
+                <action android:name="com.zhanglei.alarms.TIME_SET"></action>
+            </intent-filter>
+        </receiver>
+
+
+        <receiver android:name="com.example.root.alarmModel.AlarmReceiver">
+            <intent-filter>
+                <action android:name="com.zhanglei.alarmandmusic.ALARM_ALERT"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
