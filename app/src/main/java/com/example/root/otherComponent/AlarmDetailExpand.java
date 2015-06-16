@@ -5,6 +5,8 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.util.TypedValue;
@@ -26,6 +28,7 @@ public class AlarmDetailExpand {
     private Context context;
 
     private RelativeLayout landscape;
+    private RelativeLayout backOfSky;
 
     private TextView curTimeV;
     private TextView whenOfD;
@@ -72,6 +75,7 @@ public class AlarmDetailExpand {
     }
 
     private void init() {
+        backOfSky = (RelativeLayout)landscape.findViewById(R.id.back_of_sky);
         curTimeV = (TextView)landscape.findViewById(R.id.scroll_list_time);
         whenOfD = (TextView)landscape.findViewById(R.id.when_of_day);
 
@@ -112,6 +116,10 @@ public class AlarmDetailExpand {
         checkFri = (CheckBox)landscape.findViewById(R.id.check_fri);
         checkSat = (CheckBox)landscape.findViewById(R.id.check_sat);
         checkSun = (CheckBox)landscape.findViewById(R.id.check_sun);
+
+        SharedPreferences colorPreference = context.getSharedPreferences(MainActivity.PREFERENCES, 0);
+        int backgroundColor = colorPreference.getInt(MainActivity.BACKGROUND_COLOR, Color.argb(255, 255, 255, 0xff));
+        backOfSky.setBackgroundColor(backgroundColor);
     }
 
     public static void initReady() {

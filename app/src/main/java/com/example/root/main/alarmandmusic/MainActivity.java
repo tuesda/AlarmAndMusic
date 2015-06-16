@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.root.alarmModel.AlarmItem;
 import com.example.root.alarmModel.AlarmSQLiteHelper;
+import com.example.root.alarmModel.Alarms;
 import com.example.root.blurringView.ActivityTest;
 import com.example.root.blurringView.PopWindow;
 import com.example.root.drawerNav.LeftDrawerLayout;
@@ -39,6 +40,21 @@ import com.example.root.musicNav.*;
 
 
 public class MainActivity extends Activity {
+
+    public static final String PREFERENCES = "AlarmAndMusic";
+    static final String PREF_CLOCK_FACE = "face";
+    static final String PREF_SHOW_CLOCK = "show_clock";
+    public static final String BACKGROUND_COLOR = "alarm_background_color";
+    public static final String CURRENT_CLOCK = "current_clock";
+    public static final String FIRST_ID = "first.alarm.id";
+
+
+    static final int MAX_ALARM_COUNT = 12;
+
+
+    // This is used for debug the code, should be set false for production.
+    static final boolean DEBUG = true;
+
 
 
     public static final int MESSAGE_INIT_ALARM_LIST = 0;
@@ -179,34 +195,42 @@ public class MainActivity extends Activity {
                 switch (msg.what) {
                     case MESSAGE_INIT_ALARM_LIST:
                         alarmListLayout = new AlarmListLayout(mainActivity, MainActivity.this, alarmsHandler);
-                        alarmListLayout.setEditOnClickL(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                drawerLayout.openDrawer(leftDrawer);
-                            }
-                        });
+//                        alarmListLayout.setEditOnClickL(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                drawerLayout.openDrawer(leftDrawer);
+//                            }
+//                        });
+                        if (landScape!=null) {
+                            landScape.dispose();
+                            landScape = null;
+                        }
                         break;
                     case MESSAGE_INIT_LANDSCAPE:
                         landScape = new LandScape(MainActivity.this, mainActivity, true, null, alarmsHandler);
-                        landScape.setEditOnClickL(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                leftDrawer.setBackgroundColor(ViewColorGenerator.getMiddleColor(landScape.getCurTime()));
-                                drawerLayout.openDrawer(leftDrawer);
-                            }
-                        });
+//                        landScape.setEditOnClickL(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                leftDrawer.setBackgroundColor(ViewColorGenerator.getMiddleColor(landScape.getCurTime()));
+//                                drawerLayout.openDrawer(leftDrawer);
+//                            }
+//                        });
+                        if (alarmListLayout != null) {
+                            alarmListLayout.dispose();
+                            alarmListLayout = null;
+                        }
                         break;
                     case MESSAGE_START_LANDSCAPE:
 //                        Log.d("animation", "handled time" + System.currentTimeMillis());
                         AlarmItem alarm = (AlarmItem)msg.obj;
                         landScape = new LandScape(MainActivity.this, mainActivity, false, alarm, alarmsHandler);
-                        landScape.setEditOnClickL(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                leftDrawer.setBackgroundColor(ViewColorGenerator.getMiddleColor(landScape.getCurTime()));
-                                drawerLayout.openDrawer(leftDrawer);
-                            }
-                        });
+//                        landScape.setEditOnClickL(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                leftDrawer.setBackgroundColor(ViewColorGenerator.getMiddleColor(landScape.getCurTime()));
+//                                drawerLayout.openDrawer(leftDrawer);
+//                            }
+//                        });
                         if (alarmListLayout!=null) {
                             alarmListLayout.dispose();
                             alarmListLayout = null;
@@ -214,12 +238,12 @@ public class MainActivity extends Activity {
                         break;
                     case MESSAGE_START_ALARM_LIST:
                         alarmListLayout = new AlarmListLayout(mainActivity, MainActivity.this, alarmsHandler);
-                        alarmListLayout.setEditOnClickL(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                drawerLayout.openDrawer(leftDrawer);
-                            }
-                        });
+//                        alarmListLayout.setEditOnClickL(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                drawerLayout.openDrawer(leftDrawer);
+//                            }
+//                        });
                         if (landScape!=null) {
                             landScape.dispose();
                             landScape = null;
@@ -233,8 +257,15 @@ public class MainActivity extends Activity {
         };
 
 
-        Message msg = Message.obtain(alarmsHandler, MESSAGE_INIT_ALARM_LIST);
-        msg.sendToTarget();
+        int alarmsNum = Alarms.getCount(this);
+        if (alarmsNum == 0) {
+            Message msg = Message.obtain(alarmsHandler, MESSAGE_INIT_LANDSCAPE);
+            msg.sendToTarget();
+        } else {
+            Message msg = Message.obtain(alarmsHandler, MESSAGE_INIT_ALARM_LIST);
+            msg.sendToTarget();
+        }
+
 
 
     }

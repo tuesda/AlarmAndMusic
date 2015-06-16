@@ -7,6 +7,7 @@ import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -63,6 +64,7 @@ public class LandScape {
 
     private Context context;
     private RelativeLayout mainActivity;
+    private RelativeLayout backOfSky;
     private LayoutInflater mInflater;
 
     private RelativeLayout landscape;
@@ -160,6 +162,7 @@ public class LandScape {
 
 
         landscape = (RelativeLayout)mInflater.inflate(R.layout.landscape, null);
+        backOfSky = (RelativeLayout)landscape.findViewById(R.id.back_of_sky);
 
         curTimeV = (TextView)landscape.findViewById(R.id.scroll_list_time);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "font/custom.ttf");
@@ -271,6 +274,17 @@ public class LandScape {
 
                 btnsTimePicker.setVisibility(View.INVISIBLE);
                 isBtnsShow = false;
+                SharedPreferences sharedPreference = context.getSharedPreferences(MainActivity.PREFERENCES, 0);
+                int defaultColor = ViewColorGenerator.getMiddleColor(curTime);
+                int backgroundColor = sharedPreference.getInt(MainActivity.BACKGROUND_COLOR, defaultColor);
+                Calendar c = Calendar.getInstance();
+                c.setTimeInMillis(System.currentTimeMillis());
+                c.set(Calendar.HOUR_OF_DAY, curTime.getHour());
+                c.set(Calendar.MINUTE, curTime.getMin());
+                if (c.getTimeInMillis() < sharedPreference.getLong(MainActivity.CURRENT_CLOCK, Long.MAX_VALUE) || initAlarm.getId() == sharedPreference.getInt(MainActivity.FIRST_ID, -1)) {
+                    backgroundColor = defaultColor;
+                }
+                backOfSky.setBackgroundColor(backgroundColor);
 //                btnEdit.setOnClickListener(null);
 
                 LandscapeAnimator landscapeAnimator = new LandscapeAnimator();
@@ -330,7 +344,6 @@ public class LandScape {
         if (checkSat.isChecked()) { weeks |= SATURDAY; }
         if (checkSun.isChecked()) { weeks |= SUNDAY; }
 
-//        Toast.makeText(context, "weeks: " + weeks, Toast.LENGTH_LONG).show();
 
         // get alarmtime
         int alarmTime = 5;
@@ -362,28 +375,10 @@ public class LandScape {
         // get backGround
         String backGround = "default";
 
-        ContentValues values = new ContentValues();
-        values.put(AlarmsTable.COLUMN_TIME_HOUR, curTime.getHour());
-        values.put(AlarmsTable.COLUMN_TIME_MIN, curTime.getMin());
-        values.put(AlarmsTable.COLUMN_DAYS_OF_WEEK, weeks);
-        values.put(AlarmsTable.COLUMN_ALARM_TIME, alarmTime);
-        values.put(AlarmsTable.COLUMN_ENABLE, enable);
-        values.put(AlarmsTable.COLUMN_ALERT_TYPE, alertType);
-        values.put(AlarmsTable.COLUMN_TITLE, title);
-        values.put(AlarmsTable.COLUMN_SNOOZE, snooze);
-        values.put(AlarmsTable.COLUMN_ALERT, alert);
-        values.put(AlarmsTable.COLUMN_RING_NAME, ringName);
-        values.put(AlarmsTable.COLUMN_VOLUME, volume);
-        values.put(AlarmsTable.COLUMN_VIBRATE, vibrate);
-        values.put(AlarmsTable.COLUMN_BACK_GROUND, backGround);
 
-        if (mIsInitial) {
-            context.getContentResolver().insert(AlarmsContentProvider.CONTENT_URI, values);
-        } else {
-            Uri alarmsUri = Uri.withAppendedPath(AlarmsContentProvider.CONTENT_URI, "/" + initAlarm.getId());
-            context.getContentResolver().update(alarmsUri, values, null, null);
-        }
-        Alarms.setNextAlert(context);
+
+        Alarms.saveAlarm(context, mIsInitial, initAlarm.getId(), curTime.getHour(), curTime.getMin(), weeks, alarmTime,
+                enable, alertType, title, snooze, alert, ringName, volume, vibrate, backGround);
     }
 
 

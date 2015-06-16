@@ -7,11 +7,13 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.Preference;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -34,6 +36,7 @@ import com.example.root.main.alarmandmusic.R;
 import com.example.root.scroll.TimeInDay;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -102,6 +105,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
             }
         });
 
+        refreshBackgroundColor();
 
     }
 
@@ -136,6 +140,8 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
                 return hour == otherHour ? (min - otherMin) : (hour - otherHour);
             }
         });
+
+        refreshBackgroundColor();
         if (isFirstLoad) {
             initAlarmsListV();
             isFirstLoad = false;
@@ -148,7 +154,30 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
 
-
+    private void refreshBackgroundColor() {
+        if (alarms!=null && alarms.size()>0) {
+            // store background color of alarms[0]
+            TimeInDay firstTime = alarms.get(0).getTimeInDay();
+            SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFERENCES, 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(MainActivity.BACKGROUND_COLOR, ViewColorGenerator.getMiddleColor(firstTime));
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(System.currentTimeMillis());
+            c.set(Calendar.HOUR_OF_DAY, firstTime.getHour());
+            c.set(Calendar.MINUTE, firstTime.getMin());
+            editor.putLong(MainActivity.CURRENT_CLOCK, c.getTimeInMillis());
+            editor.putInt(MainActivity.FIRST_ID, alarms.get(0).getId());
+            editor.apply();
+        }
+        if (alarms!=null && alarms.size()==0) {
+            SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFERENCES, 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(MainActivity.BACKGROUND_COLOR);
+            editor.remove(MainActivity.CURRENT_CLOCK);
+            editor.remove(MainActivity.FIRST_ID);
+            editor.apply();
+        }
+    }
 
 
 
@@ -207,20 +236,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (alarms.size() > 0) {
-                    int[] colors = ViewColorGenerator.getTopBtmColor(alarms.get(firstVisibleItem).getTimeInDay());
-//                Toast.makeText(context, "red " + Color.red(colors[0]), Toast.LENGTH_LONG).show();
-                    int start_a = Color.alpha(colors[0]);
-                    int start_r = Color.red(colors[0]);
-                    int start_g = Color.green(colors[0]);
-                    int start_b = Color.blue(colors[0]);
-
-                    int end_a = Color.alpha(colors[1]);
-                    int end_r = Color.red(colors[1]);
-                    int end_g = Color.green(colors[1]);
-                    int end_b = Color.blue(colors[1]);
-
-                    int current = Color.argb((start_a + end_a) / 2, (start_r + end_r) / 2, (start_g + end_g) / 2, (start_b + end_b) / 2);
-                    alarmListLayout.setBackgroundColor(current);
+                    alarmListLayout.setBackgroundColor(ViewColorGenerator.getMiddleColor(alarms.get(firstVisibleItem).getTimeInDay()));
                 }
             }
         });

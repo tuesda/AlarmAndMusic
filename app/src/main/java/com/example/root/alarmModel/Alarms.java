@@ -9,8 +9,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.util.Log;
+import android.net.Uri;
+import android.os.AsyncTask;
 
+import com.example.root.main.alarmandmusic.Log;
 import com.example.root.scroll.TimeInDay;
 
 import java.util.Calendar;
@@ -59,7 +61,7 @@ public class Alarms {
     private static void enableAlert(Context context, final AlarmItem alarmItem, final long atTimeInMillis) {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(atTimeInMillis);
-        Log.i("alarms_fuck", " " + c.toString());
+        Log.v("alarms_fuck " + c.toString());
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(ALARM_ALERT_ACTION);
         intent.putExtra("alarm_id", alarmItem.getId());
@@ -107,7 +109,7 @@ public class Alarms {
 
         int addDays = getNextDaysOfWeek(daysInWeek, c);
 
-        Log.i("alarms_fuck", "addDays: " + addDays);
+//        Log.i("alarms_fuck", "addDays: " + addDays);
         // when user didn't choose the days of week
         if (addDays==-1) {
             if (c.getTimeInMillis() < System.currentTimeMillis()) {
@@ -213,7 +215,7 @@ public class Alarms {
             );
 
         } else {
-            Log.i(Alarms.class.getName(), "Hour or Min from database is invalid hour=" + hour + " min=" + min);
+            Log.v("Hour or Min from database is invalid hour=" + hour + " min=" + min);
         }
 
         return alarmItem;
@@ -226,6 +228,93 @@ public class Alarms {
     private static Cursor getFilterAlarmsCursor(ContentResolver contentResolver) {
         return contentResolver.query(AlarmsContentProvider.CONTENT_URI, AlarmsTable.ALARM_QUERY_COLUMNS, AlarmsTable.WHERE_ENABLE, null, null);
     }
+
+    public static int getCount(Context context) {
+        int result = 0;
+        Cursor cursor = context.getContentResolver().query(AlarmsContentProvider.CONTENT_URI, null, null, null, null);
+        if (cursor!=null) {
+            result = cursor.getCount();
+            cursor.close();
+        }
+
+
+        return result;
+    }
+
+    public static void saveAlarm(final Context context, final boolean insert, final int id, int hour, int min, int weeks, int alarmTime, int enable,
+            int alertType, String title, int snooze, String alert, String ringName,
+            int volume, int vibrate, String backGround) {
+
+
+        // get alarmtime
+        if (alarmTime == 0) alarmTime = 5;
+
+
+
+        // get title
+        if (title == null) title = "Get up!";
+
+
+        // get alert
+        if (alert == null) alert = "default";
+
+        // get ringName
+        if (ringName == null) ringName = "ring";
+
+
+
+        // get backGround
+        if (backGround == null) backGround = "default";
+
+
+        final ContentValues values = new ContentValues();
+        final ContentResolver resolver = context.getContentResolver();
+
+        long time = 0;
+
+        if(Log.LOGV) {
+            Log.v("*** saveAlarm * id: " + id + " hour: " + hour + " min: " + min +
+                    " enabled: " +  enable + " time: " + time);
+        }
+
+        values.put(AlarmsTable.COLUMN_TIME_HOUR, hour);
+        values.put(AlarmsTable.COLUMN_TIME_MIN, min);
+        values.put(AlarmsTable.COLUMN_DAYS_OF_WEEK, weeks);
+        values.put(AlarmsTable.COLUMN_ALARM_TIME, alarmTime);
+        values.put(AlarmsTable.COLUMN_ENABLE, enable);
+        values.put(AlarmsTable.COLUMN_ALERT_TYPE, alertType);
+        values.put(AlarmsTable.COLUMN_TITLE, title);
+        values.put(AlarmsTable.COLUMN_SNOOZE, snooze);
+        values.put(AlarmsTable.COLUMN_ALERT, alert);
+        values.put(AlarmsTable.COLUMN_RING_NAME, ringName);
+        values.put(AlarmsTable.COLUMN_VOLUME, volume);
+        values.put(AlarmsTable.COLUMN_VIBRATE, vibrate);
+        values.put(AlarmsTable.COLUMN_BACK_GROUND, backGround);
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                if (insert) {
+                    resolver.insert(AlarmsContentProvider.CONTENT_URI, values);
+                } else {
+                    resolver.update(ContentUris.withAppendedId(AlarmsContentProvider.CONTENT_URI, id), values, null, null);
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                setNextAlert(context);
+            }
+        }.execute();
+
+
+
+
+
+
+    }
+
 
 
 }
