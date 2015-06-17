@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -86,6 +87,7 @@ public class AlarmListAdapter extends BaseAdapter {
                 Alarms.setNextAlert(context);
             }
         });
+
         GradientDrawable bg = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, alarms.get(i).getBgColors());
         view.setBackground(bg);
 

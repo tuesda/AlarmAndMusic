@@ -223,8 +223,9 @@
         <Button
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:text="ok"
-            android:background="#30000000"
+            android:background="@drawable/music_nav_round_button"
+            android:text="OK"
+            android:textColor="@color/white"
             android:id="@+id/btn_time_ok"
             android:layout_width="@dimen/btn_time_ok_w"
             android:layout_height="@dimen/btn_time_ok_h" />

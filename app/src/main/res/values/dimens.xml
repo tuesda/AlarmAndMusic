@@ -108,7 +108,7 @@
     <dimen name="weeks_pick_h">30dp</dimen>
 
     <dimen name="btn_time_ok_w">45dp</dimen>
-    <dimen name="btn_time_ok_h">30dp</dimen>
+    <dimen name="btn_time_ok_h">45dp</dimen>
 
 
     <!-- Following is about alarm item size -->

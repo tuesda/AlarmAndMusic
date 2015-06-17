@@ -38,6 +38,7 @@ import com.example.root.alarmModel.AlarmItem;
 import com.example.root.alarmModel.Alarms;
 import com.example.root.alarmModel.AlarmsContentProvider;
 import com.example.root.alarmModel.AlarmsTable;
+import com.example.root.main.alarmandmusic.FontUtil;
 import com.example.root.main.alarmandmusic.MainActivity;
 import com.example.root.main.alarmandmusic.R;
 import com.example.root.scroll.ScrollLayout;
@@ -165,10 +166,9 @@ public class LandScape {
         backOfSky = (RelativeLayout)landscape.findViewById(R.id.back_of_sky);
 
         curTimeV = (TextView)landscape.findViewById(R.id.scroll_list_time);
-        Typeface tf = Typeface.createFromAsset(context.getAssets(), "font/custom.ttf");
-        curTimeV.setTypeface(tf);
+        curTimeV.setTypeface(FontUtil.getDefaultFont(context));
         whenOfD = (TextView)landscape.findViewById(R.id.when_of_day);
-        whenOfD.setTypeface(tf);
+        whenOfD.setTypeface(FontUtil.getDefaultFont(context));
         whenOfD.setText("Midnight");
 
         timeColon = (ImageView)landscape.findViewById(R.id.colon);
@@ -206,6 +206,7 @@ public class LandScape {
 
         btnsTimePicker = (RelativeLayout)landscape.findViewById(R.id.btns_pick_time);
         timeOk = (Button)landscape.findViewById(R.id.btn_time_ok);
+        timeOk.setTypeface(FontUtil.getDefaultFont(context));
         checkMon = (CheckBox)landscape.findViewById(R.id.check_mon);
         checkTus = (CheckBox)landscape.findViewById(R.id.check_tues);
         checkWed = (CheckBox)landscape.findViewById(R.id.check_wed);

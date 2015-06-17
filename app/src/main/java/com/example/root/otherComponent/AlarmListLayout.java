@@ -14,7 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.Preference;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,6 +31,8 @@ import com.example.root.alarmModel.AlarmItem;
 import com.example.root.alarmModel.Alarms;
 import com.example.root.alarmModel.AlarmsContentProvider;
 import com.example.root.alarmModel.AlarmsTable;
+import com.example.root.main.alarmandmusic.FontUtil;
+import com.example.root.main.alarmandmusic.Log;
 import com.example.root.main.alarmandmusic.MainActivity;
 import com.example.root.main.alarmandmusic.R;
 import com.example.root.scroll.TimeInDay;
@@ -67,6 +69,8 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
     // indicating first time load data from database
     private boolean isFirstLoad = true;
 
+    // indicating item id which is added with delete button
+    private long delAlarmIndex = -1;
 
 
 
@@ -105,8 +109,39 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
             }
         });
 
+        alarmListV.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int touchIndex = alarmListV.pointToPosition((int) motionEvent.getX(), (int) motionEvent.getY());
+                Log.v("operation    " + touchIndex + " delAlarmId: " + delAlarmIndex);
+                if (delAlarmIndex >= 0 && touchIndex != delAlarmIndex) {
+                    removeBtns();
+                }
+                return false;
+            }
+        });
+        alarmListLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                removeBtns();
+                return false;
+            }
+        });
+
+
         refreshBackgroundColor();
 
+    }
+
+    private void removeBtns() {
+
+        if (!deleteBtnCache.isEmpty()) {
+            for (HashMap.Entry<RelativeLayout, Button> entry : deleteBtnCache.entrySet()) {
+                entry.getKey().removeView(entry.getValue());
+                deleteBtnCache.remove(entry.getKey());
+            }
+        }
+        delAlarmIndex = -1;
     }
 
 
@@ -200,10 +235,15 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
         alarmListV.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                removeBtns(); // prevent from there are two delete buttons
                 final View tmpView = view;
                 final Button deleteBtn = new Button(context);
                 deleteBtn.setText("Delete");
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                deleteBtn.setBackgroundColor(0x90ff0000);
+                deleteBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                deleteBtn.setTextColor(Color.WHITE);
+                deleteBtn.setTypeface(FontUtil.getDefaultFont(context));
                 params.addRule(RelativeLayout.CENTER_IN_PARENT);
                 final int alarmId = ((AlarmListAdapter.AlarmViewHolder) view.getTag()).id;
                 deleteBtn.setOnClickListener(new View.OnClickListener() {
@@ -214,9 +254,10 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
                         ((RelativeLayout) tmpView).removeView(deleteBtn);
                     }
                 });
+
                 deleteBtnCache.put((RelativeLayout) view, deleteBtn);
                 ((RelativeLayout) view).addView(deleteBtn, params);
-
+                delAlarmIndex = position;
                 return true;
             }
         });
@@ -225,12 +266,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
         alarmListV.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-                if (!deleteBtnCache.isEmpty()) {
-                    for (HashMap.Entry<RelativeLayout, Button> entry : deleteBtnCache.entrySet()) {
-                        entry.getKey().removeView(entry.getValue());
-                        deleteBtnCache.remove(entry.getKey());
-                    }
-                }
+
             }
 
             @Override
@@ -241,6 +277,8 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
             }
         });
     }
+
+
 
 
     /**
