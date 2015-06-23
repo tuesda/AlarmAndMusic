@@ -81,10 +81,7 @@ public class AlarmListAdapter extends BaseAdapter {
         holder.enable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                ContentValues enableUpdate = new ContentValues();
-                enableUpdate.put(AlarmsTable.COLUMN_ENABLE, isChecked ? 1 : 0);
-                context.getContentResolver().update(AlarmsContentProvider.CONTENT_URI, enableUpdate, "_id=?", new String[]{String.valueOf(holder.id)});
-                Alarms.setNextAlert(context);
+                Alarms.enableAlarm(context, holder.id, isChecked ? true : false);
             }
         });
 

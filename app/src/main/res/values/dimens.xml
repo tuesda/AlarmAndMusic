@@ -77,7 +77,7 @@
     <dimen name="cur_time_top">63dp</dimen>
     <dimen name="cur_time_textsize">60sp</dimen>
 
-    <dimen name="btn_edit_w">21dp</dimen>
+    <dimen name="btn_edit_w">20dp</dimen>
     <dimen name="btn_edit_h">15dp</dimen>
     <dimen name="btn_edit_left">11dp</dimen>
     <dimen name="btn_edit_top">14dp</dimen>
@@ -124,5 +124,10 @@
 
     <dimen name="alarm_colon_left">85dp</dimen>
     <dimen name="alarm_colon_top">45dp</dimen>
+
+    <dimen name="add_alarm_right">11dp</dimen>
+    <dimen name="add_alarm_top">14dp</dimen>
+    <dimen name="add_alarm_w">20dp</dimen>
+    <dimen name="add_alarm_h">20dp</dimen>
 
 </resources>

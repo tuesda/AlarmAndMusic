@@ -3,6 +3,8 @@ package com.example.root.alarmModel;
 import com.example.root.otherComponent.ViewColorGenerator;
 import com.example.root.scroll.TimeInDay;
 
+import java.util.Arrays;
+
 /**
  * Created by zhanglei on 15/5/31.
  */
@@ -154,5 +156,25 @@ public class AlarmItem {
 
     public void setBackGround(String backGround) {
         this.backGround = backGround;
+    }
+
+    @Override
+    public String toString() {
+        return "AlarmItem{" +
+                "id=" + id +
+                ", timeInDay=" + timeInDay +
+                ", bgColors=" + Arrays.toString(bgColors) +
+                ", weeks=" + weeks +
+                ", alertTime=" + alertTime +
+                ", enable=" + enable +
+                ", alertType=" + alertType +
+                ", title='" + title + '\'' +
+                ", snooze=" + snooze +
+                ", alert='" + alert + '\'' +
+                ", ringName='" + ringName + '\'' +
+                ", volume=" + volume +
+                ", vibrate=" + vibrate +
+                ", backGround='" + backGround + '\'' +
+                '}';
     }
 }

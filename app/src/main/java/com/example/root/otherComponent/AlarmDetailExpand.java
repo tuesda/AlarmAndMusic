@@ -54,7 +54,7 @@ public class AlarmDetailExpand {
     private ImageView houseSide;
     private ImageView houseWindow;
     private ImageView stars;
-    private ImageView btnEdit;
+    private Button btnEdit;
 
 
 
@@ -103,7 +103,7 @@ public class AlarmDetailExpand {
 
         stars = (ImageView)landscape.findViewById(R.id.stars);
 
-        btnEdit = (ImageView)landscape.findViewById(R.id.btn_edit);
+        btnEdit = (Button)landscape.findViewById(R.id.btn_edit);
 
 
 

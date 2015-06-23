@@ -10,4 +10,5 @@
     <string name="left_drawer_title">设置</string>
     <string name="left_drawer_content_title_text">强制模式</string>
     <string name="left_drawer_content_text">开启此模式后，用户在次日闹钟响铃前使用手机将会出现温馨提示</string>
+    <string name="alarm_alert_snooze_set">%d分钟后提醒</string>
 </resources>

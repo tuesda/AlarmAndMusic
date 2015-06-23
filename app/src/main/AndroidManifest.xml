@@ -5,6 +5,8 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -23,6 +25,7 @@
         <activity android:name="com.example.root.alarms.AlertActivity">
 
         </activity>
+
         <service android:name="com.example.root.musicNav.MusicService"></service>
         <activity android:name="com.example.root.blurringView.ActivityTest"></activity>
 
@@ -39,8 +42,15 @@
         <receiver android:name="com.example.root.alarmModel.AlarmReceiver">
             <intent-filter>
                 <action android:name="com.zhanglei.alarmandmusic.ALARM_ALERT"></action>
+                <action android:name="cancel_snooze"></action>
             </intent-filter>
         </receiver>
+
+        <service android:name="com.example.root.alarms.AlarmService">
+            <intent-filter>
+                <action android:name="com.zhanglei.alarmandmusic.ALARM_ALERT"></action>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

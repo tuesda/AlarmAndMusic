@@ -38,6 +38,7 @@ import com.example.root.alarmModel.AlarmItem;
 import com.example.root.alarmModel.Alarms;
 import com.example.root.alarmModel.AlarmsContentProvider;
 import com.example.root.alarmModel.AlarmsTable;
+import com.example.root.main.alarmandmusic.AnimatorUtil;
 import com.example.root.main.alarmandmusic.FontUtil;
 import com.example.root.main.alarmandmusic.MainActivity;
 import com.example.root.main.alarmandmusic.R;
@@ -99,7 +100,8 @@ public class LandScape {
     private ImageView houseSide;
     private ImageView houseWindow;
     private ImageView stars;
-    private ImageView btnEdit;
+    private Button btnEdit;
+    private Button btnAlarmList;
  /*wind_fan animation rotation
      * created by wxk*/
     //private Animation windmillfan_anim;
@@ -195,7 +197,8 @@ public class LandScape {
 
         stars = (ImageView)landscape.findViewById(R.id.stars);
 
-        btnEdit = (ImageView)landscape.findViewById(R.id.btn_edit);
+        btnEdit = (Button)landscape.findViewById(R.id.btn_edit);
+        btnAlarmList = (Button)landscape.findViewById(R.id.btn_alarm_list);
 
         /*animation rotation
          * create by wxk*/
@@ -267,6 +270,16 @@ public class LandScape {
             }
         });
 
+        btnAlarmList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Message msg = Message.obtain(alarmsHandler, MainActivity.MESSAGE_START_ALARM_LIST);
+                msg.sendToTarget();
+            }
+        });
+        AnimatorSet btnAlarmListAni = AnimatorUtil.expandView(btnAlarmList, 500, true);
+        btnAlarmListAni.start();
+
         timeOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -314,7 +327,7 @@ public class LandScape {
         landscape.post(new Runnable() {
             @Override
             public void run() {
-                if (!mIsInitial) {
+                if (true) {
                     AlarmDetailExpand expand = new AlarmDetailExpand(context, landscape);
                     expand.upBottom(500);
                     int[] phonesizes = getPhoneSize();

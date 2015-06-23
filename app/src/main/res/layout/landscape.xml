@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_landscape"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -168,14 +169,31 @@
         android:layout_height="@dimen/stars_h" />
 
 
-    <ImageView
-        android:visibility="gone"
+    <!--<ImageView-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_marginTop="@dimen/btn_edit_top"-->
+        <!--android:layout_marginLeft="@dimen/btn_edit_left"-->
+        <!--android:id="@+id/btn_edit"-->
+        <!--android:src="@drawable/btn_edit"-->
+        <!--android:layout_width="@dimen/btn_edit_w"-->
+        <!--android:layout_height="@dimen/btn_edit_h" />-->
+
+    <Button
         android:layout_marginTop="@dimen/btn_edit_top"
         android:layout_marginLeft="@dimen/btn_edit_left"
         android:id="@+id/btn_edit"
-        android:src="@drawable/btn_edit"
+        android:background="@drawable/btn_edit"
         android:layout_width="@dimen/btn_edit_w"
         android:layout_height="@dimen/btn_edit_h" />
+    <Button
+        android:layout_alignParentRight="true"
+        android:background="@drawable/alarmlist"
+        android:layout_marginRight="@dimen/add_alarm_right"
+        android:layout_marginTop="@dimen/add_alarm_top"
+        android:id="@+id/btn_alarm_list"
+        android:layout_width="@dimen/add_alarm_w"
+        android:layout_height="@dimen/add_alarm_h" />
+
 
     <RelativeLayout
         android:background="#00000000"

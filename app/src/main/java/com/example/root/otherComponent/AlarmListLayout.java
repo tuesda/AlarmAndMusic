@@ -1,5 +1,6 @@
 package com.example.root.otherComponent;
 
+import android.animation.AnimatorSet;
 import android.app.AlarmManager;
 import android.app.LoaderManager;
 import android.app.PendingIntent;
@@ -31,6 +32,7 @@ import com.example.root.alarmModel.AlarmItem;
 import com.example.root.alarmModel.Alarms;
 import com.example.root.alarmModel.AlarmsContentProvider;
 import com.example.root.alarmModel.AlarmsTable;
+import com.example.root.main.alarmandmusic.AnimatorUtil;
 import com.example.root.main.alarmandmusic.FontUtil;
 import com.example.root.main.alarmandmusic.Log;
 import com.example.root.main.alarmandmusic.MainActivity;
@@ -56,7 +58,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
     private List<AlarmItem> alarms;
     private RelativeLayout alarmListLayout;
     private Button btn_add;
-    private ImageView btnEdit;
+    private Button btnEdit;
     private ListView alarmListV;
     AlarmListAdapter alarmsAdapter;
 
@@ -87,8 +89,11 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
     private void init() {
         alarmListLayout = (RelativeLayout) mInflater.inflate(R.layout.alarm_list_layout, null);
         alarmListV = (ListView) alarmListLayout.findViewById(R.id.alarm_list);
-        btnEdit = (ImageView)alarmListLayout.findViewById(R.id.btn_edit);
-        ((MainActivity)context).getLoaderManager().initLoader(0, null, this);
+        btnEdit = (Button)alarmListLayout.findViewById(R.id.btn_edit);
+        btn_add = (Button)alarmListLayout.findViewById(R.id.add_alarm);
+        AnimatorSet btnAddAni = AnimatorUtil.expandView(btn_add, 500, true);
+        btnAddAni.start();
+        ((MainActivity) context).getLoaderManager().initLoader(0, null, this);
 
         alarmListV.setDivider(null);
         RelativeLayout.LayoutParams alarmsParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -100,20 +105,13 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
         }
         deleteBtnCache = new HashMap<RelativeLayout, Button>();
 
-        btn_add = (Button)alarmListLayout.findViewById(R.id.add_alarm);
-        btn_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Message msg = Message.obtain(alarmsHandler, MainActivity.MESSAGE_INIT_LANDSCAPE);
-                msg.sendToTarget();
-            }
-        });
+
 
         alarmListV.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 int touchIndex = alarmListV.pointToPosition((int) motionEvent.getX(), (int) motionEvent.getY());
-                Log.v("operation    " + touchIndex + " delAlarmId: " + delAlarmIndex);
+                // Log.v("operation    " + touchIndex + " delAlarmId: " + delAlarmIndex);
                 if (delAlarmIndex >= 0 && touchIndex != delAlarmIndex) {
                     removeBtns();
                 }
@@ -131,6 +129,22 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
 
         refreshBackgroundColor();
 
+
+    }
+
+    private void checkAlarmsCount() {
+        if (Alarms.getCount(context) >= MainActivity.MAX_ALARM_COUNT) {
+            btn_add.setOnClickListener(null);
+        } else {
+            btn_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Message msg = Message.obtain(alarmsHandler, MainActivity.MESSAGE_INIT_LANDSCAPE);
+                    msg.sendToTarget();
+                }
+            });
+
+        }
     }
 
     private void removeBtns() {
@@ -185,6 +199,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
         }
 
         alarmListV.setVisibility(View.VISIBLE);
+        checkAlarmsCount();
     }
 
 
@@ -250,7 +265,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
                     @Override
                     public void onClick(View btnView) {
 //                        Toast.makeText(context, "delete button clicked id: " + alarmId, Toast.LENGTH_SHORT).show();
-                        context.getContentResolver().delete(AlarmsContentProvider.CONTENT_URI, "_id=?", new String[]{String.valueOf(alarmId)});
+                        Alarms.deleteAlarm(context, alarmId);
                         ((RelativeLayout) tmpView).removeView(deleteBtn);
                     }
                 });
@@ -339,6 +354,11 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public void dispose() {
         mainActivity.removeView(alarmListLayout);
+    }
+
+
+    public void onPause() {
+        removeBtns();
     }
 
 

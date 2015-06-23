@@ -10,28 +10,20 @@ import android.os.IBinder;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.root.alarmModel.AlarmItem;
-import com.example.root.alarmModel.AlarmSQLiteHelper;
 import com.example.root.alarmModel.Alarms;
-import com.example.root.blurringView.ActivityTest;
 import com.example.root.blurringView.PopWindow;
 import com.example.root.drawerNav.LeftDrawerLayout;
 import com.example.root.musicNav.MusicService;
 import com.example.root.otherComponent.AlarmListLayout;
 import com.example.root.otherComponent.LandScape;
-import com.example.root.otherComponent.ViewColorGenerator;
-import com.example.root.scroll.*;
 
 import com.example.root.musicNav.MusicService.*;
 import com.example.root.musicNav.*;
@@ -48,8 +40,10 @@ public class MainActivity extends Activity {
     public static final String CURRENT_CLOCK = "current_clock";
     public static final String FIRST_ID = "first.alarm.id";
 
+    public static final String KEY_ALARM_SNOOZE = "alarm.snooze.time";
 
-    static final int MAX_ALARM_COUNT = 12;
+
+    public static final int MAX_ALARM_COUNT = 12;
 
 
     // This is used for debug the code, should be set false for production.
@@ -100,6 +94,8 @@ public class MainActivity extends Activity {
     }
 
     private void init() {
+
+
         //debug zone start
 
         //debug zone end
@@ -192,6 +188,7 @@ public class MainActivity extends Activity {
         alarmsHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
+                Log.v("MainActivity: in alarmsHandler.handleMessage(msg) msg.what = " + msg.what);
                 switch (msg.what) {
                     case MESSAGE_INIT_ALARM_LIST:
                         alarmListLayout = new AlarmListLayout(mainActivity, MainActivity.this, alarmsHandler);
@@ -313,5 +310,11 @@ public class MainActivity extends Activity {
       //  landScape.dispose();
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (alarmListLayout != null) {
+            alarmListLayout.onPause();
+        }
+    }
 }

@@ -8,11 +8,14 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.AlarmClock;
 
 import com.example.root.main.alarmandmusic.Log;
+import com.example.root.main.alarmandmusic.MainActivity;
 import com.example.root.scroll.TimeInDay;
 
 import java.util.Calendar;
@@ -27,6 +30,12 @@ public class Alarms {
     // is a public action used in the manifest for receiving Alarm broadcasts
     // from the alarm manager.
     public static final String ALARM_ALERT_ACTION = "com.zhanglei.alarmandmusic.ALARM_ALERT";
+    public static final String CANCEL_SNOOZE = "cancel_snooze";
+
+    public static final String AlARM_ID = "alarm_id";
+
+    final static String PREF_SNOOZE_ID = "snooze_id";
+    final static String PREF_SNOOZE_TIME = "snooze_time";
 
     private static final int MONDAY = 1;
     private static final int TUESDAY = 2;
@@ -49,11 +58,13 @@ public class Alarms {
 
 
     public static void setNextAlert(final Context context) {
-        AlarmItem alarmItem = calculateNextAlert(context);
-        if (alarmItem!=null) {
+        if (!enableSnoozeAlert(context)) {
+            AlarmItem alarmItem = calculateNextAlert(context);
+            if (alarmItem!=null) {
 
 
-            enableAlert(context, alarmItem, calculateAlarm(alarmItem.getTimeInDay().getHour(), alarmItem.getTimeInDay().getMin(), alarmItem.getWeeks()).getTimeInMillis());
+                enableAlert(context, alarmItem, calculateAlarm(alarmItem.getTimeInDay().getHour(), alarmItem.getTimeInDay().getMin(), alarmItem.getWeeks()).getTimeInMillis());
+            }
         }
     }
 
@@ -61,10 +72,10 @@ public class Alarms {
     private static void enableAlert(Context context, final AlarmItem alarmItem, final long atTimeInMillis) {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(atTimeInMillis);
-        Log.v("alarms_fuck " + c.toString());
+        Log.v("alarms_fuck " + c.toString() + "alarm id " + alarmItem.getId());
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(ALARM_ALERT_ACTION);
-        intent.putExtra("alarm_id", alarmItem.getId());
+        intent.putExtra(AlARM_ID, alarmItem.getId());
 
 
         PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -316,5 +327,144 @@ public class Alarms {
     }
 
 
+    public static AlarmItem getAlarmWithId(Context context, int id) {
+        AlarmItem alarm = null;
+        if (id == -1) {
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(System.currentTimeMillis());
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int min = c.get(Calendar.MINUTE);
+            alarm = new AlarmItem(0, new TimeInDay(hour, min), 0, 0, 0, 0, "", 0, "", "", 0, 0,  "");
+        } else {
+            ContentResolver resolver = context.getContentResolver();
+            Cursor cursor = resolver.query(ContentUris.withAppendedId(AlarmsContentProvider.CONTENT_URI, id), null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                alarm = getAlarmFromCursor(cursor);
+            }
+        }
+        return alarm;
+    }
+
+
+
+    public static void saveSnoozeAlert(final Context context, final int id,
+                                       final long time) {
+        SharedPreferences prefs = context.getSharedPreferences(
+                MainActivity.PREFERENCES, 0);
+        if (id == -1) {
+            clearSnoozePreference(context, prefs);
+        } else {
+            SharedPreferences.Editor ed = prefs.edit();
+            ed.putInt(PREF_SNOOZE_ID, id);
+            ed.putLong(PREF_SNOOZE_TIME, time);
+            ed.commit();
+        }
+        // Set the next alert after updating the snooze.
+        setNextAlert(context);
+    }
+
+    // Helper to remove the snooze preference. Do not use clear because that
+    // will erase the clock preferences. Also clear the snooze notification in
+    // the window shade.
+    private static void clearSnoozePreference(final Context context,
+                                              final SharedPreferences prefs) {
+        final int alarmId = prefs.getInt(PREF_SNOOZE_ID, -1);
+
+
+        final SharedPreferences.Editor ed = prefs.edit();
+        ed.remove(PREF_SNOOZE_ID);
+        ed.remove(PREF_SNOOZE_TIME);
+        ed.commit();
+    }
+
+    /**
+     * If there is a snooze set, enable it in AlarmManager
+     * @return true if snooze is set
+     */
+    private static boolean enableSnoozeAlert(final Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(
+                MainActivity.PREFERENCES, 0);
+
+        int id = prefs.getInt(PREF_SNOOZE_ID, -1);
+        if (id == -1) {
+            return false;
+        }
+        long time = prefs.getLong(PREF_SNOOZE_TIME, -1);
+
+        // Get the alarm from the db.
+        final AlarmItem alarm = getAlarmWithId(context, id);
+        // The time in the database is either 0 (repeating) or a specific time
+        // for a non-repeating alarm. Update this value so the AlarmReceiver
+        // has the right time to compare.
+        alarm.setAlertTime((int) time);
+
+        enableAlert(context, alarm, time);
+        return true;
+    }
+
+    /**
+     * Disable the snooze alert if the given id matches the snooze id.
+     */
+    static void disableSnoozeAlert(final Context context, final int id) {
+        SharedPreferences prefs = context.getSharedPreferences(
+                MainActivity.PREFERENCES, 0);
+        int snoozeId = prefs.getInt(PREF_SNOOZE_ID, -1);
+        if (snoozeId == -1) {
+            // No snooze set, do nothing.
+            return;
+        } else if (snoozeId == id) {
+            // This is the same id so clear the shared prefs.
+            clearSnoozePreference(context, prefs);
+        }
+    }
+
+
+
+    /**
+     * Removes an existing Alarm.  If this alarm is snoozing, disables
+     * snooze.  Sets next alert.
+     */
+    public static void deleteAlarm(
+            Context context, int alarmId) {
+
+        ContentResolver contentResolver = context.getContentResolver();
+        /* If alarm is snoozing, lose it */
+        disableSnoozeAlert(context, alarmId);
+
+        Uri uri = ContentUris.withAppendedId(AlarmsContentProvider.CONTENT_URI, alarmId);
+        contentResolver.delete(uri, "", null);
+
+        setNextAlert(context);
+    }
+
+    public static void enableAlarm(
+            final Context context, final int id, boolean enabled) {
+        enableAlarmInternal(context, id, enabled);
+        setNextAlert(context);
+    }
+
+    private static void enableAlarmInternal(final Context context,
+                                            final int id, boolean enabled) {
+        enableAlarmInternal(context, getAlarmWithId(context, id),
+                enabled);
+    }
+
+    public static boolean isWeeksRepeat(int weeks) {
+        int count = 0;
+        if ((weeks & MONDAY) == 1) count++;
+        if ((weeks & TUESDAY) == 1) count++;
+        if ((weeks & WEDNESDAY) == 1) count++;
+        if ((weeks & THURSDAY) == 1) count++;
+        if ((weeks & FRIDAY) == 1) count++;
+        if ((weeks & SATURDAY) == 1) count++;
+        if ((weeks & SUNDAY) == 1) count++;
+        if (count > 1) {
+            return  true;
+        } else {
+            return false;
+        }
+
+    }
 
 }

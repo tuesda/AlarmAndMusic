@@ -9,11 +9,26 @@
         android:layout_height="match_parent" />
 
     <TextView
-        android:layout_centerInParent="true"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
         android:text="alerting"
         android:textSize="50sp"
         android:textColor="#ffffffff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/alert_close"
+        android:layout_marginTop="200dp"
+        android:layout_centerHorizontal="true"
+        android:text="close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/alert_deny"
+        android:layout_below="@id/alert_close"
+        android:text="deny"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>
