@@ -130,4 +130,7 @@
     <dimen name="add_alarm_w">20dp</dimen>
     <dimen name="add_alarm_h">20dp</dimen>
 
+    <dimen name="daycheck_w_h">20dp</dimen>
+    <dimen name="daycheck_left">12dp</dimen>
+
 </resources>

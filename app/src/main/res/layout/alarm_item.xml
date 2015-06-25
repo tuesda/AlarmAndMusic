@@ -40,5 +40,15 @@
         android:id="@+id/alarm_enable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <com.example.root.customeView.DaysView
+        android:id="@+id/alarm_item_weeks"
+        android:layout_marginLeft="127dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="105dp"
+        android:layout_height="9dp"
+        >
+
+    </com.example.root.customeView.DaysView>
 
 </RelativeLayout>

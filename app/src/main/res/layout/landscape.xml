@@ -208,34 +208,48 @@
             android:id="@+id/weeks_pick"
             android:layout_width="@dimen/weeks_pick_w"
             android:layout_height="@dimen/weeks_pick_h">
-            <CheckBox
+            <com.example.root.customeView.DayCheckBox
+                android:layout_marginLeft="@dimen/daycheck_left"
+                android:layout_gravity="center_vertical"
                 android:id="@+id/check_mon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <CheckBox
+                android:layout_width="@dimen/daycheck_w_h"
+                android:layout_height="@dimen/daycheck_w_h" />
+            <com.example.root.customeView.DayCheckBox
+                android:layout_marginLeft="@dimen/daycheck_left"
+                android:layout_gravity="center_vertical"
                 android:id="@+id/check_tues"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <CheckBox
+                android:layout_width="@dimen/daycheck_w_h"
+                android:layout_height="@dimen/daycheck_w_h" />
+            <com.example.root.customeView.DayCheckBox
+                android:layout_marginLeft="@dimen/daycheck_left"
+                android:layout_gravity="center_vertical"
                 android:id="@+id/check_wed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <CheckBox
+                android:layout_width="@dimen/daycheck_w_h"
+                android:layout_height="@dimen/daycheck_w_h" />
+            <com.example.root.customeView.DayCheckBox
+                android:layout_marginLeft="@dimen/daycheck_left"
+                android:layout_gravity="center_vertical"
                 android:id="@+id/check_thur"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <CheckBox
+                android:layout_width="@dimen/daycheck_w_h"
+                android:layout_height="@dimen/daycheck_w_h" />
+            <com.example.root.customeView.DayCheckBox
+                android:layout_marginLeft="@dimen/daycheck_left"
+                android:layout_gravity="center_vertical"
                 android:id="@+id/check_fri"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <CheckBox
+                android:layout_width="@dimen/daycheck_w_h"
+                android:layout_height="@dimen/daycheck_w_h" />
+            <com.example.root.customeView.DayCheckBox
+                android:layout_marginLeft="@dimen/daycheck_left"
+                android:layout_gravity="center_vertical"
                 android:id="@+id/check_sat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <CheckBox
+                android:layout_width="@dimen/daycheck_w_h"
+                android:layout_height="@dimen/daycheck_w_h" />
+            <com.example.root.customeView.DayCheckBox
+                android:layout_marginLeft="@dimen/daycheck_left"
+                android:layout_gravity="center_vertical"
                 android:id="@+id/check_sun"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="@dimen/daycheck_w_h"
+                android:layout_height="@dimen/daycheck_w_h" />
         </LinearLayout>
         
         <Button

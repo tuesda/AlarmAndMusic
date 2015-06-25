@@ -113,22 +113,28 @@ public class Alarms {
     public static Calendar calculateAlarm (int hour, int min, int daysInWeek) {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
+
+
+        int nowHour = c.get(Calendar.HOUR_OF_DAY);
+        int nowMin = c.get(Calendar.MINUTE);
+
+        if (hour < nowHour || (hour==nowHour && min < nowMin)) {
+            c.add(Calendar.DAY_OF_WEEK, 1);
+        }
+
+
         c.set(Calendar.HOUR_OF_DAY, hour);
         c.set(Calendar.MINUTE, min);
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
 
+
+
         int addDays = getNextDaysOfWeek(daysInWeek, c);
 
 //        Log.i("alarms_fuck", "addDays: " + addDays);
         // when user didn't choose the days of week
-        if (addDays==-1) {
-            if (c.getTimeInMillis() < System.currentTimeMillis()) {
-                addDays = 1;
-            } else {
-                addDays = 0;
-            }
-        }
+        
 
 
         if (addDays > 0) {

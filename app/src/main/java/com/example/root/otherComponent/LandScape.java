@@ -38,6 +38,7 @@ import com.example.root.alarmModel.AlarmItem;
 import com.example.root.alarmModel.Alarms;
 import com.example.root.alarmModel.AlarmsContentProvider;
 import com.example.root.alarmModel.AlarmsTable;
+import com.example.root.customeView.DayCheckBox;
 import com.example.root.main.alarmandmusic.AnimatorUtil;
 import com.example.root.main.alarmandmusic.FontUtil;
 import com.example.root.main.alarmandmusic.MainActivity;
@@ -110,13 +111,13 @@ public class LandScape {
 
     private RelativeLayout btnsTimePicker;
     private Button timeOk;
-    private CheckBox checkMon;
-    private CheckBox checkTus;
-    private CheckBox checkWed;
-    private CheckBox checkThur;
-    private CheckBox checkFri;
-    private CheckBox checkSat;
-    private CheckBox checkSun;
+    private DayCheckBox checkMon;
+    private DayCheckBox checkTus;
+    private DayCheckBox checkWed;
+    private DayCheckBox checkThur;
+    private DayCheckBox checkFri;
+    private DayCheckBox checkSat;
+    private DayCheckBox checkSun;
 
     private boolean isBtnsShow = true;
 
@@ -210,13 +211,22 @@ public class LandScape {
         btnsTimePicker = (RelativeLayout)landscape.findViewById(R.id.btns_pick_time);
         timeOk = (Button)landscape.findViewById(R.id.btn_time_ok);
         timeOk.setTypeface(FontUtil.getDefaultFont(context));
-        checkMon = (CheckBox)landscape.findViewById(R.id.check_mon);
-        checkTus = (CheckBox)landscape.findViewById(R.id.check_tues);
-        checkWed = (CheckBox)landscape.findViewById(R.id.check_wed);
-        checkThur = (CheckBox)landscape.findViewById(R.id.check_thur);
-        checkFri = (CheckBox)landscape.findViewById(R.id.check_fri);
-        checkSat = (CheckBox)landscape.findViewById(R.id.check_sat);
-        checkSun = (CheckBox)landscape.findViewById(R.id.check_sun);
+        checkMon = (DayCheckBox)landscape.findViewById(R.id.check_mon);
+        checkTus = (DayCheckBox)landscape.findViewById(R.id.check_tues);
+        checkWed = (DayCheckBox)landscape.findViewById(R.id.check_wed);
+        checkThur = (DayCheckBox)landscape.findViewById(R.id.check_thur);
+        checkFri = (DayCheckBox)landscape.findViewById(R.id.check_fri);
+        checkSat = (DayCheckBox)landscape.findViewById(R.id.check_sat);
+        checkSun = (DayCheckBox)landscape.findViewById(R.id.check_sun);
+
+        checkMon.setContentText("一");
+        checkTus.setContentText("二");
+        checkWed.setContentText("三");
+        checkThur.setContentText("四");
+        checkFri.setContentText("五");
+        checkSat.setContentText("六");
+        checkSun.setContentText("七");
+
         if (!mIsInitial) {
             int weeks = initAlarm.getWeeks();
             if ((MONDAY & weeks) == MONDAY) { checkMon.setChecked(true);}
@@ -261,12 +271,16 @@ public class LandScape {
             public void setVisible() {
                 if (isBtnsShow) {
                     btnsTimePicker.setVisibility(View.VISIBLE);
+                    btnEdit.setVisibility(View.VISIBLE);
+                    btnAlarmList.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void setInvisible() {
                 btnsTimePicker.setVisibility(View.INVISIBLE);
+                btnEdit.setVisibility(View.INVISIBLE);
+                btnAlarmList.setVisibility(View.INVISIBLE);
             }
         });
 

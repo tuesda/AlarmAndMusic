@@ -21,6 +21,7 @@ import com.example.root.alarmModel.AlarmItem;
 import com.example.root.alarmModel.Alarms;
 import com.example.root.alarmModel.AlarmsContentProvider;
 import com.example.root.alarmModel.AlarmsTable;
+import com.example.root.customeView.DaysView;
 import com.example.root.main.alarmandmusic.R;
 
 import java.util.List;
@@ -68,6 +69,7 @@ public class AlarmListAdapter extends BaseAdapter {
             holder.when = (TextView) view.findViewById(R.id.alarm_when_of_day);
             holder.colon = (ImageView) view.findViewById(R.id.alarm_colon);
             holder.enable = (CheckBox) view.findViewById(R.id.alarm_enable);
+            holder.weeks = (DaysView) view.findViewById(R.id.alarm_item_weeks);
             view.setTag(holder);
         } else {
             holder = (AlarmViewHolder) view.getTag();
@@ -84,6 +86,7 @@ public class AlarmListAdapter extends BaseAdapter {
                 Alarms.enableAlarm(context, holder.id, isChecked ? true : false);
             }
         });
+        holder.weeks.setWeeks(alarms.get(i).getWeeks());
 
         GradientDrawable bg = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, alarms.get(i).getBgColors());
         view.setBackground(bg);
@@ -97,6 +100,7 @@ public class AlarmListAdapter extends BaseAdapter {
         TextView when;
         ImageView colon;
         CheckBox enable;
+        DaysView weeks;
         int id;
 
     }
