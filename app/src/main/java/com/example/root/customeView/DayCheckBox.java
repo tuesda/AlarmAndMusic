@@ -109,7 +109,7 @@ public class DayCheckBox extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawCircle(centerX, centerY, getRadius(), mPaint);
+        canvas.drawCircle(centerX, getCenterY(), getRadius(), mPaint);
         if (isPlaying) invalidate();
         if (!isPlaying && !isChecked && mContentText!=null && !mContentText.equals("")) {
             mTextPaint.getTextBounds(mContentText, 0, mContentText.length(), mTextBounds);
@@ -117,6 +117,13 @@ public class DayCheckBox extends View {
             float textH = mTextBounds.height();
             if (mContentText.equals("一")) textH = textW;
             canvas.drawText(mContentText, getWidth()/2 - textW/2, getHeight()/2 + textH/2, mTextPaint);
+        }
+        if (!isPlaying && isChecked && mContentText!=null && !mContentText.equals("")) {
+            mTextPaint.getTextBounds(mContentText, 0, mContentText.length(), mTextBounds);
+            float textW = mTextBounds.width();
+            float textH = mTextBounds.height();
+            if (mContentText.equals("一")) textH = textW;
+            canvas.drawText(mContentText, getWidth()/2 - textW/2, getHeight()/4 + textH/2, mTextPaint);
         }
     }
 
@@ -146,6 +153,20 @@ public class DayCheckBox extends View {
             curRadius = mRadius;
         }
         return curRadius;
+    }
+
+    private int getCenterY() {
+        int curY = centerY;
+        if (!isPlaying) {
+            return isChecked ? centerY * 3 / 2 : centerY;
+        } else {
+            float ratio = (System.currentTimeMillis()-startTime)/(float)duration;
+            ratio = Math.min(ratio, 1);
+            ratio = isChecked ? 1-ratio:ratio;
+            curY += centerY/2 * ratio;
+
+        }
+        return curY;
     }
 
     //interface to set text in View

@@ -95,8 +95,6 @@ public class AlarmListAdapter extends BaseAdapter {
         GradientDrawable bg = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, alarms.get(i).getBgColors());
         view.setBackground(bg);
 
-        AnimatorSet haha = AnimatorUtil.expandView(view, 600, true);
-        haha.start();
         return view;
     }
 

@@ -120,7 +120,7 @@
 
     <dimen name="alarm_when_left">25dp</dimen>
     <dimen name="alarm_when_top">20dp</dimen>
-    <dimen name="alarm_when_text">8sp</dimen>
+    <dimen name="alarm_when_text">10sp</dimen>
 
     <dimen name="alarm_colon_left">85dp</dimen>
     <dimen name="alarm_colon_top">45dp</dimen>

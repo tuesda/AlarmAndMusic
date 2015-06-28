@@ -3,8 +3,11 @@ package com.example.root.customeView;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.example.root.main.alarmandmusic.R;
 
 /**
  * Created by zhanglei on 15/6/24.
@@ -17,13 +20,11 @@ public class DaysView extends View {
     private int mCentreH;
     private int mWeeks = -1;
 
-    private static final int MONDAY = 1;
-    private static final int TUESDAY = 1;
-    private static final int WEDNESDAY = 1;
-    private static final int THURSDAY = 1;
-    private static final int FRIDAY = 1;
-    private static final int SATURDAY = 1;
-    private static final int SUNDAY = 1;
+    private String[] mWeekTexts;
+    private String mFullWeeksText;
+    private String mOneTime;
+
+    private Rect mBounds;
 
 
     public DaysView(Context context) {
@@ -36,14 +37,21 @@ public class DaysView extends View {
 
     public DaysView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context, attrs, defStyleAttr);
     }
 
-    private void init() {
+    private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         mCirclePaint = new Paint();
         mCirclePaint.setColor(0x7fffffff);
         mCirclePaint.setStyle(Paint.Style.FILL);
         mCirclePaint.setAntiAlias(true);
+        mCirclePaint.setTextSize(25);
+
+        mWeekTexts = context.getResources().getStringArray(R.array.weeks_text);
+        mFullWeeksText = context.getResources().getString(R.string.full_weeks);
+        mOneTime = context.getResources().getString(R.string.weeks_one_time);
+        mBounds = new Rect();
+
 
     }
 
@@ -61,13 +69,29 @@ public class DaysView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int centerW = mFirstCentreW;
+
+        if (mWeeks == 127) {
+            mCirclePaint.getTextBounds(mFullWeeksText, 0, mFullWeeksText.length(), mBounds);
+            canvas.drawText(mFullWeeksText, centerW - mBounds.width()/2, mCentreH+mBounds.height()/2, mCirclePaint);
+            return;
+        }
+
+        if (mWeeks == 0) {
+            mCirclePaint.getTextBounds(mOneTime, 0, mOneTime.length(), mBounds);
+            canvas.drawText(mOneTime, centerW - mBounds.width()/2, mCentreH + mBounds.height()/2, mCirclePaint);
+            return;
+        }
+
         for (int i=0; i<7; i++) {
-            if (mWeeks!=-1) {
-                Paint.Style style = invertWeeks(mWeeks, i) ? Paint.Style.FILL : Paint.Style.STROKE;
-                mCirclePaint.setStyle(style);
+            String text = mWeekTexts[i];
+            if (mWeeks!=-1 && invertWeeks(mWeeks, i)) {
+                mCirclePaint.getTextBounds(text, 0, text.length(), mBounds);
+                int height = mCentreH + mBounds.height()/2;
+                if (i==0) height = mCentreH * 3 / 2;
+                canvas.drawText(text, centerW-mBounds.width()/2, height, mCirclePaint);
+                centerW += getWidth()/7 * text.length();
             }
-            canvas.drawCircle(centerW, mCentreH, mRadius, mCirclePaint);
-            centerW += getWidth()/7;
+
         }
     }
 

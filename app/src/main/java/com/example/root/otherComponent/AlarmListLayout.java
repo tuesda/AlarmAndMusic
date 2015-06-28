@@ -129,6 +129,7 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
         });
 
 
+
         refreshBackgroundColor();
 
 
