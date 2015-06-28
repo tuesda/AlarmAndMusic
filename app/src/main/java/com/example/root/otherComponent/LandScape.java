@@ -238,6 +238,7 @@ public class LandScape {
             if ((SUNDAY & weeks) == SUNDAY) { checkSun.setChecked(true);}
 
         }
+        btnsTimePicker.setVisibility(View.INVISIBLE);
 
 
         scrollLayout.setOnTimeChange(new ScrollLayout.OnTimeChange() {
@@ -287,43 +288,21 @@ public class LandScape {
         btnAlarmList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message msg = Message.obtain(alarmsHandler, MainActivity.MESSAGE_START_ALARM_LIST);
-                msg.sendToTarget();
+                startCloseAni();
             }
         });
         AnimatorSet btnAlarmListAni = AnimatorUtil.expandView(btnAlarmList, 500, true);
+        AnimatorSet btnEditAni = AnimatorUtil.expandView(btnEdit, 500, true);
         btnAlarmListAni.start();
+        btnEditAni.start();
 
         timeOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveAlarm();
 
+                startCloseAni();
 
-                btnsTimePicker.setVisibility(View.INVISIBLE);
-                isBtnsShow = false;
-                SharedPreferences sharedPreference = context.getSharedPreferences(MainActivity.PREFERENCES, 0);
-                int defaultColor = ViewColorGenerator.getMiddleColor(curTime);
-                int backgroundColor = sharedPreference.getInt(MainActivity.BACKGROUND_COLOR, defaultColor);
-                Calendar c = Calendar.getInstance();
-                c.setTimeInMillis(System.currentTimeMillis());
-                c.set(Calendar.HOUR_OF_DAY, curTime.getHour());
-                c.set(Calendar.MINUTE, curTime.getMin());
-                if (c.getTimeInMillis() < sharedPreference.getLong(MainActivity.CURRENT_CLOCK, Long.MAX_VALUE) || initAlarm.getId() == sharedPreference.getInt(MainActivity.FIRST_ID, -1)) {
-                    backgroundColor = defaultColor;
-                }
-                backOfSky.setBackgroundColor(backgroundColor);
-//                btnEdit.setOnClickListener(null);
-
-                LandscapeAnimator landscapeAnimator = new LandscapeAnimator();
-                landscapeAnimator.downBottom(500);
-
-                int[] phonesizes = getPhoneSize();
-                int btmMargin = phonesizes[1] - DensityUtil.dptopx(context, 100 + 40);
-                int topMargin = DensityUtil.dptopx(context, 40);
-
-
-                landscapeAnimator.upTop(500, btmMargin, topMargin);
             }
         });
 
@@ -343,17 +322,50 @@ public class LandScape {
             public void run() {
                 if (true) {
                     AlarmDetailExpand expand = new AlarmDetailExpand(context, landscape);
-                    expand.upBottom(500);
+                    expand.upBottom(400);
                     int[] phonesizes = getPhoneSize();
                     int btmMargin = phonesizes[1] - DensityUtil.dptopx(context, 100 + 40);
                     int topMargin = DensityUtil.dptopx(context, 40);
 
 
-                    expand.downTop(500, btmMargin, topMargin);
+                    expand.downTop(400, btmMargin, topMargin);
                 }
             }
         });
 
+
+    }
+
+    private void startCloseAni() {
+        btnsTimePicker.setVisibility(View.INVISIBLE);
+        isBtnsShow = false;
+        SharedPreferences sharedPreference = context.getSharedPreferences(MainActivity.PREFERENCES, 0);
+        int defaultColor = ViewColorGenerator.getMiddleColor(curTime);
+        int backgroundColor = sharedPreference.getInt(MainActivity.BACKGROUND_COLOR, defaultColor);
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        c.set(Calendar.HOUR_OF_DAY, curTime.getHour());
+        c.set(Calendar.MINUTE, curTime.getMin());
+        if (c.getTimeInMillis() < sharedPreference.getLong(MainActivity.CURRENT_CLOCK, Long.MAX_VALUE) || initAlarm.getId() == sharedPreference.getInt(MainActivity.FIRST_ID, -1)) {
+            backgroundColor = defaultColor;
+        }
+        backOfSky.setBackgroundColor(backgroundColor);
+//                btnEdit.setOnClickListener(null);
+
+        LandscapeAnimator landscapeAnimator = new LandscapeAnimator();
+        landscapeAnimator.downBottom(400);
+
+        int[] phonesizes = getPhoneSize();
+        int btmMargin = phonesizes[1] - DensityUtil.dptopx(context, 100 + 40);
+        int topMargin = DensityUtil.dptopx(context, 40);
+
+
+        landscapeAnimator.upTop(400, btmMargin, topMargin);
+
+        AnimatorSet btnAlarmListAni = AnimatorUtil.expandView(btnAlarmList, 250, false);
+        AnimatorSet btnEditAni = AnimatorUtil.expandView(btnEdit, 250, false);
+        btnAlarmListAni.start();
+        btnEditAni.start();
 
     }
 

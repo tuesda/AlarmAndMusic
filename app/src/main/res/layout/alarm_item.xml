@@ -32,14 +32,14 @@
         android:id="@+id/alarm_when_of_day"
         android:layout_width="@dimen/when_of_day_w"
         android:layout_height="@dimen/when_of_day_h" />
-    <CheckBox
+    <com.example.root.customeView.SwitchView
         android:focusable="false"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="60dp"
+        android:layout_marginRight="40dp"
         android:layout_centerVertical="true"
         android:id="@+id/alarm_enable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="60dp"
+        android:layout_height="40dp" />
     <com.example.root.customeView.DaysView
         android:id="@+id/alarm_item_weeks"
         android:layout_marginLeft="127dp"

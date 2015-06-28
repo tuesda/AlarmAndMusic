@@ -64,8 +64,21 @@ public class Alarms {
 
 
                 enableAlert(context, alarmItem, calculateAlarm(alarmItem.getTimeInDay().getHour(), alarmItem.getTimeInDay().getMin(), alarmItem.getWeeks()).getTimeInMillis());
+            } else {
+                disableAlert(context);
             }
         }
+    }
+
+
+
+    private static void disableAlert(Context context) {
+        AlarmManager am = (AlarmManager)
+                context.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent sender = PendingIntent.getBroadcast(
+                context, 0, new Intent(ALARM_ALERT_ACTION),
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        am.cancel(sender);
     }
 
 
@@ -118,7 +131,7 @@ public class Alarms {
         int nowHour = c.get(Calendar.HOUR_OF_DAY);
         int nowMin = c.get(Calendar.MINUTE);
 
-        if (hour < nowHour || (hour==nowHour && min < nowMin)) {
+        if (hour < nowHour || (hour==nowHour && min <= nowMin)) {
             c.add(Calendar.DAY_OF_WEEK, 1);
         }
 
@@ -134,7 +147,7 @@ public class Alarms {
 
 //        Log.i("alarms_fuck", "addDays: " + addDays);
         // when user didn't choose the days of week
-        
+
 
 
         if (addDays > 0) {
@@ -458,13 +471,13 @@ public class Alarms {
 
     public static boolean isWeeksRepeat(int weeks) {
         int count = 0;
-        if ((weeks & MONDAY) == 1) count++;
-        if ((weeks & TUESDAY) == 1) count++;
-        if ((weeks & WEDNESDAY) == 1) count++;
-        if ((weeks & THURSDAY) == 1) count++;
-        if ((weeks & FRIDAY) == 1) count++;
-        if ((weeks & SATURDAY) == 1) count++;
-        if ((weeks & SUNDAY) == 1) count++;
+        if ((weeks & MONDAY) == 1<<0) count++;
+        if ((weeks & TUESDAY) == 1<<1) count++;
+        if ((weeks & WEDNESDAY) == 1<<2) count++;
+        if ((weeks & THURSDAY) == 1<<3) count++;
+        if ((weeks & FRIDAY) == 1<<4) count++;
+        if ((weeks & SATURDAY) == 1<<5) count++;
+        if ((weeks & SUNDAY) == 1<<6) count++;
         if (count > 1) {
             return  true;
         } else {

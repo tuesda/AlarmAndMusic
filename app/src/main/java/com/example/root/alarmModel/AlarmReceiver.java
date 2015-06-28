@@ -84,6 +84,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Alarms.disableSnoozeAlert(context, alarmItem.getId());
         // Disable this alarm if it does not repeat.
         if (!Alarms.isWeeksRepeat(alarmItem.getWeeks())) {
+            //Log.v("fuck:   I am in not repeat weeks weeks = " + alarmItem.getWeeks());
             Alarms.enableAlarm(context, alarmItem.getId(), false);
         } else {
             // Enable the next alert if there is one. The above call to

@@ -91,8 +91,10 @@ public class AlarmListLayout  implements LoaderManager.LoaderCallbacks<Cursor> {
         alarmListV = (ListView) alarmListLayout.findViewById(R.id.alarm_list);
         btnEdit = (Button)alarmListLayout.findViewById(R.id.btn_edit);
         btn_add = (Button)alarmListLayout.findViewById(R.id.add_alarm);
-        AnimatorSet btnAddAni = AnimatorUtil.expandView(btn_add, 500, true);
+        AnimatorSet btnAddAni = AnimatorUtil.expandView(btn_add, 250, true);
+        AnimatorSet btnEditAni = AnimatorUtil.expandView(btnEdit, 250, true);
         btnAddAni.start();
+        btnEditAni.start();
         ((MainActivity) context).getLoaderManager().initLoader(0, null, this);
 
         alarmListV.setDivider(null);

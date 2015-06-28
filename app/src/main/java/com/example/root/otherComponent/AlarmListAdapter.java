@@ -1,5 +1,6 @@
 package com.example.root.otherComponent;
 
+import android.animation.AnimatorSet;
 import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
@@ -22,6 +23,9 @@ import com.example.root.alarmModel.Alarms;
 import com.example.root.alarmModel.AlarmsContentProvider;
 import com.example.root.alarmModel.AlarmsTable;
 import com.example.root.customeView.DaysView;
+import com.example.root.customeView.SwitchView;
+import com.example.root.main.alarmandmusic.AnimatorUtil;
+import com.example.root.main.alarmandmusic.Log;
 import com.example.root.main.alarmandmusic.R;
 
 import java.util.List;
@@ -68,7 +72,7 @@ public class AlarmListAdapter extends BaseAdapter {
             holder.time = (TextView) view.findViewById(R.id.alarm_time);
             holder.when = (TextView) view.findViewById(R.id.alarm_when_of_day);
             holder.colon = (ImageView) view.findViewById(R.id.alarm_colon);
-            holder.enable = (CheckBox) view.findViewById(R.id.alarm_enable);
+            holder.enable = (SwitchView) view.findViewById(R.id.alarm_enable);
             holder.weeks = (DaysView) view.findViewById(R.id.alarm_item_weeks);
             view.setTag(holder);
         } else {
@@ -80,9 +84,9 @@ public class AlarmListAdapter extends BaseAdapter {
         holder.when.setText(ViewColorGenerator.getWhenInDay(alarms.get(i).getTimeInDay()));
         holder.id = alarms.get(i).getId();
         holder.enable.setChecked(alarms.get(i).getEnable() == 1 ? true : false);
-        holder.enable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.enable.setOnCheckedChangeListener(new SwitchView.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+            public void onCheckedChanged(View view, boolean isChecked) {
                 Alarms.enableAlarm(context, holder.id, isChecked ? true : false);
             }
         });
@@ -91,7 +95,8 @@ public class AlarmListAdapter extends BaseAdapter {
         GradientDrawable bg = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, alarms.get(i).getBgColors());
         view.setBackground(bg);
 
-
+        AnimatorSet haha = AnimatorUtil.expandView(view, 600, true);
+        haha.start();
         return view;
     }
 
@@ -99,7 +104,7 @@ public class AlarmListAdapter extends BaseAdapter {
         TextView time;
         TextView when;
         ImageView colon;
-        CheckBox enable;
+        SwitchView enable;
         DaysView weeks;
         int id;
 

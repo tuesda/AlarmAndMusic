@@ -211,7 +211,27 @@ public class AlarmDetailExpand {
         sky.play(skyAnim).with(timeAnim).with(whenAnim).with(colonAnim);
 
 
+        sky.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
 
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                btnsTimePicker.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
         sky.setDuration(duration);
         sky.start();
 
